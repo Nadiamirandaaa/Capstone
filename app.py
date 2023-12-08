@@ -18,6 +18,10 @@ def antrian():
 def petunjuk():
    return render_template('petunjuk.html')
 
+@app.route('/login')
+def login():
+   return render_template('login.html')
+
 @app.route('/artikelkolesterol')
 def artikelkolesterol():
    return render_template('artikelkolesterol.html')
