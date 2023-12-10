@@ -18,6 +18,18 @@ def antrian():
 def petunjuk():
    return render_template('petunjuk.html')
 
+@app.route('/petunjukpasienlama')
+def petunjukpasienlama():
+   return render_template('petunjukpasienlama.html')
+
+@app.route('/petunjukpasienbaru')
+def petunjukpasienbaru():
+   return render_template('petunjukpasienbaru.html')
+
+@app.route('/petunjukhasilpemeriksaan')
+def petunjukhasilpemeriksaan():
+   return render_template('petunjukhasilpemeriksaan.html')
+
 @app.route('/login')
 def login():
    return render_template('login.html')
