@@ -42,7 +42,7 @@ def antrian():
 def petunjuk():
    return render_template('petunjuk.html')
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login')
 def login():
     error = None  # Inisialisasi variabel error
     if request.method == 'POST':
