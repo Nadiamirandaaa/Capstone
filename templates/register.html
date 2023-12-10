@@ -15,29 +15,6 @@
 
 <body>
 
-    <!-- Start Header/Navigation -->
-    <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" aria-label="Furni navigation bar">
-        <div class="container">
-            <a class="navbar-brand" href="/">HealtyMe<span>.</span></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni"
-                aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarsFurni">
-                <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
-                    </li>
-                    <li><a class="nav-link" href="/pendaftaranonline">Pendaftaran Online</a></li>
-                    <li><a class="nav-link" href="/antrian">Antrian</a></li>
-                    <li><a class="nav-link" href="/petunjuk">Petunjuk</a></li>
-                    <li class="active"><a class="nav-link" href="/login">Login</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <!-- End Header/Navigation -->
-
     <!-- Start Registration Form -->
     <div class="container mt-4">
         <div class="row justify-content-center">
@@ -46,7 +23,7 @@
                     <div class="card-header">Registrasi</div>
                     <div class="card-body">
                         <!-- Form -->
-                        <form action="/proses-registrasi" method="POST">
+                        <form action="/register" method="POST">
                             <div class="mb-3">
                                 <label for="nama" class="form-label">Nama</label>
                                 <input type="text" class="form-control" id="nama" name="nama" required>

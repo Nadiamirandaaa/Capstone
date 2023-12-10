@@ -1,6 +1,26 @@
-from flask import Flask, render_template
+from pymongo import MongoClient
+import jwt
+from datetime import datetime, timedelta
+import hashlib
+from flask import Flask, render_template, jsonify, request, redirect, url_for,flash,session
+
+from werkzeug.utils import secure_filename
+
+import os
+from os.path import join, dirname
+from dotenv import load_dotenv
+
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
+
+MONGODB_URI = os.environ.get("MONGODB_URI")
+DB_NAME =  os.environ.get("DB_NAME")
+
+client = MongoClient(MONGODB_URI)
+db = client[DB_NAME]
 
 app = Flask(__name__)
+app.secret_key = 'secret_key_string'
 
 @app.route('/')
 def home():
@@ -8,7 +28,11 @@ def home():
 
 @app.route('/pendaftaranonline')
 def pendaftaranonline():
-   return render_template('pendaftaranonline.html')
+    if 'username' not in session:  # Periksa apakah pengguna sudah login
+        flash('Anda harus login untuk mengakses halaman pendaftaran online', 'warning')
+        return redirect(url_for('login'))  # Jika belum login, arahkan ke halaman login
+
+    return render_template('pendaftaranonline.html')
 
 @app.route('/antrian')
 def antrian():
@@ -18,13 +42,56 @@ def antrian():
 def petunjuk():
    return render_template('petunjuk.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-   return render_template('login.html')
+    error = None  # Inisialisasi variabel error
+    if request.method == 'POST':
+        nama = request.form['nama']
+        nik = request.form['nik']
 
-@app.route('/register')
+        # Hash nik yang diinput untuk mencocokkan dengan yang tersimpan di database
+        hashed_nik = hashlib.sha256(nik.encode()).hexdigest()
+
+        # Cek apakah pengguna ada di basis data (di sini menggunakan contoh dummy_users)
+        user = db.users.find_one({'nama': nama, 'nik': hashed_nik})
+      
+        
+        if user:
+            # Lakukan tindakan setelah berhasil login
+            session['username'] = nama  # Simpan nama pengguna dalam sesi
+            flash(f"Selamat datang, {nama}! Anda berhasil login.", 'success')
+            return redirect(url_for('pendaftaranonline'))  # Alihkan ke halaman pendaftaran online setelah login berhasil
+
+        else:
+            flash("Kombinasi nama dan nik salah. Silakan coba lagi.", 'danger')
+
+    return render_template('login.html', error=error)
+
+@app.route('/register', methods=['GET','POST'])
 def register():
-   return render_template('register.html')
+    if request.method == 'POST':
+        nama = request.form['nama']
+        nik = request.form['nik']
+        jenis_kelamin = request.form['jenis_kelamin']
+        alamat = request.form['alamat']
+        bpjs = request.form['bpjs']
+
+        # Hashing password menggunakan SHA-256
+        hashed_nik = hashlib.sha256(nik.encode()).hexdigest()
+        hashed_bpjs = hashlib.sha256(bpjs.encode()).hexdigest()
+
+        # Simpan data ke MongoDB
+        user_data = {
+            'nama': nama,
+            'nik': hashed_nik,
+            'jenis_kelamin':jenis_kelamin,
+            'alamat':alamat,
+            'bpjs':hashed_bpjs # Simpan password yang di-hash
+        }
+
+        db.users.insert_one(user_data)  # Menyimpan data ke koleksi MongoDB
+        return "Registrasi berhasil! Data tersimpan di MongoDB."
+    return render_template('register.html')
 
 @app.route('/artikelkolesterol')
 def artikelkolesterol():
@@ -37,6 +104,11 @@ def artikelguladarah():
 @app.route('/artikelurine')
 def artikelurine():
    return render_template('artikelurine.html')
+
+@app.route('/akun')
+def akun():
+   return render_template('akun.html')
+
 
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5000, debug=True)

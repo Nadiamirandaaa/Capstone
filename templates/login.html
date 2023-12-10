@@ -13,41 +13,25 @@
 <body>
 
 	<!-- Start Header/Navigation -->
-	<nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" aria-label="Furni navigation bar">
-		<div class="container">
-			<a class="navbar-brand" href="/">HealtyMe<span>.</span></a>
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni"
-				aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarsFurni">
-				<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
-					<li class="nav-item">
-						<a class="nav-link" href="/">Home</a>
-					</li>
-					<li><a class="nav-link" href="/pendaftaranonline">Pendaftaran Online</a></li>
-					<li><a class="nav-link" href="/antrian">Antrian</a></li>
-					<li><a class="nav-link" href="/petunjuk">Petunjuk</a></li>
-					<li class="active"><a class="nav-link" href="/login">Login</a></li>
-				</ul>
-			</div>
-		</div>
-	</nav>
+	{% include 'navbar.html' %}
 	<!-- End Header/Navigation -->
 
 	<!-- Login Form -->
 	<div class="container">
 		<div class="login-form">
 		  <h2 class="logo-text">HealtyMe</h2>
-		  <form>
+		  <form action="/login" method="post">
 			<div class="mb-3">
 			  <label for="inputName" class="form-label">Name</label>
-			  <input type="text" class="form-control" id="inputName" placeholder="Enter your name">
+			  <input type="text" class="form-control" id="inputName" placeholder="Enter your name" name="nama">
 			</div>
 			<div class="mb-3">
 			  <label for="inputNIK" class="form-label">NIK/BPJS</label>
-			  <input type="text" class="form-control" id="inputNIK" placeholder="Enter your NIK/BPJS number">
+			  <input type="text" class="form-control" id="inputNIK" placeholder="Enter your NIK/BPJS number" name="nik">
 			</div>
+			{% if error %}
+                <p class="text-danger">{{ error }}</p> <!-- Menampilkan pesan kesalahan di sini -->
+            {% endif %}
 			<button type="submit" class="btn btn-secondary login-btn d-block mx-auto">Login</button>
 			<p class="text-center mt-3">Belum Punya Akun? <a href="/register" class="register-link">Daftar Sekarang</a></p>
 		  </form>
