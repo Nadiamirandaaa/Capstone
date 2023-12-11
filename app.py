@@ -13,14 +13,12 @@ from dotenv import load_dotenv
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
-MONGODB_URI = os.environ.get("MONGODB_URI")
-DB_NAME =  os.environ.get("DB_NAME")
+MONGODB_CONNECTION_STRING = "mongodb+srv://capgemini:capstone@cluster0.il5vinp.mongodb.net/?retryWrites=true&w=majority"
+client = MongoClient(MONGODB_CONNECTION_STRING)
 
-client = MongoClient(MONGODB_URI)
-db = client[DB_NAME]
+db = client.dbcapstone
 
 app = Flask(__name__)
-app.secret_key = 'secret_key_string'
 
 @app.route('/')
 def home():
@@ -41,6 +39,14 @@ def antrian():
 @app.route('/petunjuk')
 def petunjuk():
    return render_template('petunjuk.html')
+
+@app.route('/petunjukpendaftaran')
+def petunjukpendaftaran():
+   return render_template('petunjukpendaftaran.html')
+
+@app.route('/petunjukhasilpemeriksaan')
+def petunjukhasilpemeriksaan():
+   return render_template('petunjukhasilpemeriksaan.html')
 
 @app.route('/login')
 def login():
@@ -108,7 +114,6 @@ def artikelurine():
 @app.route('/akun')
 def akun():
    return render_template('akun.html')
-
 
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5000, debug=True)

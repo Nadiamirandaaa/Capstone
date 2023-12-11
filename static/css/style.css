@@ -236,3 +236,16 @@ a {
   font-size: 16px;
   font-weight: 600;
 }
+
+.petunjuk-icon {
+  width: 80px;
+  height: 80px;
+  margin-top: -40px;
+  margin-bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  border-radius: 120px;
+  transition: .5s;
+}

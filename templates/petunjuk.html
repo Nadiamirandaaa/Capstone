@@ -23,11 +23,11 @@
 
 <body>
 
-	<!-- Start Header/Navigation -->
-	
-    <!-- End Header/Navigation -->
+	<!-- Start Navbar -->
+	{% include 'navbar.html' %}
+	<!-- End Navbar -->
 
-	<!-- Start Hero Section -->
+	<!-- Start Hero -->
 	<div class="hero">
 		<div class="container text-center">
 			<div class="row justify-content-between">
@@ -39,7 +39,41 @@
 			</div>
 		</div>
 	</div>
-	<!-- End Hero Section -->
+	<!-- End Hero -->
+
+			<!-- Start Petunjuk -->
+			<div class="petunjuk-section">
+				<div class="container">	
+					<div class="row">
+						<div class="col-12 col-md-6 mb-4 mb-lg-0">
+							<div class="post-entry text-center d-flex flex-column align-items-center">
+								<a href="/petunjukpendaftaran" class="post-thumbnail"><img src="/static/gambar/icon-1.png" alt="Image" class="img-fluid"></a>
+								<div class="post-content-entry text-center">
+									<h3><a href="/petunjukpendaftaran">Alur Pendaftaran Pasien</a></h3>
+								</div>
+							</div>
+						</div>
+						
+						<div class="col-12 col-md-6 mb-4 mb-lg-0">
+							<div class="post-entry text-center d-flex flex-column align-items-center">
+								<a href="/petunjukhasilpemeriksaan" class="post-thumbnail"><img src="/static/gambar/icon-2.png" alt="Image" class="img-fluid"></a>
+								<div class="post-content-entry text-center">
+									<h3><a href="/petunjukhasilpemeriksaan">Alur Cek Hasil Pemeriksaan</a></h3>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- End Petunjuk -->
+	
+			<!-- Start Footer -->
+			<footer class="footer">
+				<div class="container-footer">
+				  2023 &copy; Kelompok 4 MSIB5
+				</div>
+			</footer>
+			<!-- End Footer -->
 
 	</body>
 </html>
