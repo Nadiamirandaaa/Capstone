@@ -30,9 +30,6 @@
 			  <label for="inputNIK" class="form-label">NIK/BPJS</label>
 			  <input type="text" class="form-control" id="inputNIK" placeholder="Enter your NIK/BPJS number" name="nik">
 			</div>
-			{% if error %}
-                <p class="text-danger">{{ error }}</p> <!-- Menampilkan pesan kesalahan di sini -->
-            {% endif %}
 			<button type="submit" class="btn btn-secondary login-btn d-block mx-auto">Login</button>
 			<p class="text-center mt-3">Belum Punya Akun? <a href="/register" class="register-link">Daftar Sekarang</a></p>
 		  </form>
