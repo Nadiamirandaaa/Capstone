@@ -13,25 +13,34 @@ from dotenv import load_dotenv
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
-MONGODB_CONNECTION_STRING = "mongodb+srv://capgemini:capstone@cluster0.il5vinp.mongodb.net/?retryWrites=true&w=majority"
-client = MongoClient(MONGODB_CONNECTION_STRING)
+MONGODB_URI = os.environ.get("MONGODB_URI")
+DB_NAME =  os.environ.get("DB_NAME")
 
-db = client.dbcapstone
+client = MongoClient(MONGODB_URI)
+db = client[DB_NAME]
 
 app = Flask(__name__)
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 @app.route('/')
 def home():
    return render_template('index.html')
 
 @app.route('/pendaftaranonline')
-def pendaftaranonline():
-    if 'username' not in session:  # Periksa apakah pengguna sudah login
-        flash('Anda harus login untuk mengakses halaman pendaftaran online', 'warning')
-        return redirect(url_for('login'))  # Jika belum login, arahkan ke halaman login
+def show_pendaftaranonline():
+    token = request.cookies.get('token')
+    if not token:
+        return redirect(url_for('login'))
 
-    return render_template('pendaftaranonline.html')
-
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+        if payload['id']:
+            return render_template('pendaftaranonline.html')
+    except jwt.ExpiredSignatureError:
+        return 'Session expired. Please log in again.'
+    except jwt.InvalidTokenError:
+        return 'Invalid token. Please log in again.'
+    
 @app.route('/antrian')
 def antrian():
    return render_template('antrian.html')
@@ -48,56 +57,63 @@ def petunjukpendaftaran():
 def petunjukhasilpemeriksaan():
    return render_template('petunjukhasilpemeriksaan.html')
 
-@app.route('/login')
+@app.route('/login', methods=['POST'])
 def login():
-    error = None  # Inisialisasi variabel error
-    if request.method == 'POST':
-        nama = request.form['nama']
-        nik = request.form['nik']
+    nama = request.form.get('nama')
+    nik = request.form.get('nik')
 
-        # Hash nik yang diinput untuk mencocokkan dengan yang tersimpan di database
-        hashed_nik = hashlib.sha256(nik.encode()).hexdigest()
+    # Menggunakan SHA256 untuk mengenkripsi NIK
+    hashed_nik = hashlib.sha256(nik.encode()).hexdigest()
 
-        # Cek apakah pengguna ada di basis data (di sini menggunakan contoh dummy_users)
-        user = db.users.find_one({'nama': nama, 'nik': hashed_nik})
-      
-        
-        if user:
-            # Lakukan tindakan setelah berhasil login
-            session['username'] = nama  # Simpan nama pengguna dalam sesi
-            flash(f"Selamat datang, {nama}! Anda berhasil login.", 'success')
-            return redirect(url_for('pendaftaranonline'))  # Alihkan ke halaman pendaftaran online setelah login berhasil
+    # Cek ke database jika data sesuai
+    user = db.users.find_one({'nama': nama, 'nik': hashed_nik})
 
-        else:
-            flash("Kombinasi nama dan nik salah. Silakan coba lagi.", 'danger')
+    if user:
+        # Buat token JWT jika user valid
+        token = jwt.encode({'id': nama, "exp": datetime.utcnow() + timedelta(seconds=60 * 60 * 24)}, SECRET_KEY, algorithm='HS256')
+        response = redirect(url_for('show_pendaftaranonline'))
+        response.set_cookie('token', token, httponly=True)  # Set cookie with HttpOnly flag
+        return response
+    else:
+        return jsonify({'error': 'Invalid credentials'}), 401
+    
+@app.route('/login')
+def show_login():
+    return render_template('login.html')
+    
+@app.route('/register')
+def show_register():
+    return render_template('register.html')
 
-    return render_template('login.html', error=error)
-
-@app.route('/register', methods=['GET','POST'])
+@app.route('/register', methods=['POST'])
 def register():
     if request.method == 'POST':
         nama = request.form['nama']
         nik = request.form['nik']
         jenis_kelamin = request.form['jenis_kelamin']
         alamat = request.form['alamat']
-        bpjs = request.form['bpjs']
 
-        # Hashing password menggunakan SHA-256
+        # Enkripsi NIK menggunakan SHA-256
         hashed_nik = hashlib.sha256(nik.encode()).hexdigest()
-        hashed_bpjs = hashlib.sha256(bpjs.encode()).hexdigest()
 
         # Simpan data ke MongoDB
-        user_data = {
+        user = {
             'nama': nama,
-            'nik': hashed_nik,
-            'jenis_kelamin':jenis_kelamin,
-            'alamat':alamat,
-            'bpjs':hashed_bpjs # Simpan password yang di-hash
+            'nik': hashed_nik,  # Menggunakan NIK yang telah di-hash
+            'jenis_kelamin': jenis_kelamin,
+            'alamat': alamat
         }
 
-        db.users.insert_one(user_data)  # Menyimpan data ke koleksi MongoDB
-        return "Registrasi berhasil! Data tersimpan di MongoDB."
-    return render_template('register.html')
+        # Pastikan NIK terenkripsi unik sebelum menyimpan ke database
+        existing_user = db.users.find_one({'nik': hashed_nik})
+        if existing_user:
+            return jsonify({'status': 'error', 'message': 'NIK sudah terdaftar'}), 400
+
+        # Simpan data ke MongoDB
+        db.users.insert_one(user)
+
+        # Return a success message and redirect URL
+        return jsonify({'status': 'success', 'message': 'Registrasi berhasil', 'redirect_url': '/login'})
 
 @app.route('/artikelkolesterol')
 def artikelkolesterol():
