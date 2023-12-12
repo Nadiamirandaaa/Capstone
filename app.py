@@ -2,13 +2,14 @@ from pymongo import MongoClient
 import jwt
 from datetime import datetime, timedelta
 import hashlib
-from flask import Flask, render_template, jsonify, request, redirect, url_for,flash,session
+from flask import Flask, render_template, jsonify, request, redirect, url_for
 
 from werkzeug.utils import secure_filename
 
 import os
 from os.path import join, dirname
 from dotenv import load_dotenv
+from functools import wraps
 
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
@@ -22,9 +23,11 @@ db = client[DB_NAME]
 app = Flask(__name__)
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
+
 @app.route('/')
 def home():
-   return render_template('index.html')
+    token = request.cookies.get('token')
+    return render_template('index.html', token=token)
 
 @app.route('/pendaftaranonline')
 def show_pendaftaranonline():
@@ -35,19 +38,22 @@ def show_pendaftaranonline():
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
         if payload['id']:
-            return render_template('pendaftaranonline.html')
+            return render_template('pendaftaranonline.html',token=token)
     except jwt.ExpiredSignatureError:
         return 'Session expired. Please log in again.'
     except jwt.InvalidTokenError:
         return 'Invalid token. Please log in again.'
     
+    
 @app.route('/antrian')
 def antrian():
-   return render_template('antrian.html')
+   token = request.cookies.get('token')
+   return render_template('antrian.html',token=token)
 
 @app.route('/petunjuk')
 def petunjuk():
-   return render_template('petunjuk.html')
+   token = request.cookies.get('token')
+   return render_template('petunjuk.html',token=token)
 
 @app.route('/petunjukpendaftaran')
 def petunjukpendaftaran():
@@ -79,11 +85,13 @@ def login():
     
 @app.route('/login')
 def show_login():
-    return render_template('login.html')
+    token = request.cookies.get('token')
+    return render_template('login.html',token=token)
     
 @app.route('/register')
 def show_register():
-    return render_template('register.html')
+    token = request.cookies.get('token')
+    return render_template('register.html',token=token)
 
 @app.route('/register', methods=['POST'])
 def register():

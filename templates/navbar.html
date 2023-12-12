@@ -23,14 +23,14 @@
                 <li class="nav-item {% if request.path == url_for('petunjuk') %}active{% endif %}">
                     <a class="nav-link" href="{{ url_for('petunjuk') }}">Petunjuk</a>
                 </li>
-                {% if logged_in %}
-                <li class="nav-item {% if request.path == url_for('akun') %}active{% endif %}">
-                    <a class="nav-link" href="{{ url_for('akun') }}">Akun</a>
-                </li>
+                {% if token %}
+                    <li class="nav-item {% if request.path == url_for('akun') %}active{% endif %}">
+                        <a class="nav-link" href="{{ url_for('akun') }}">Akun</a>
+                    </li>
                 {% else %}
-                <li class="nav-item {% if request.path == url_for('show_login') %}active{% endif %}">
-                    <a class="nav-link" href="{{ url_for('show_login') }}">Login</a>
-                </li>                
+                    <li class="nav-item {% if request.path == url_for('show_login') %}active{% endif %}">
+                        <a class="nav-link" href="{{ url_for('show_login') }}">Login</a>
+                    </li>                
                 {% endif %}
             </ul>
 
