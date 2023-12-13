@@ -94,23 +94,20 @@ def pendaftaranonline():
         sesi = request.form['sesi']
         mcu = request.form['mcu']
 
-        count_antrian = db.antrian.count_documents({})
         
         # Cari nomor antrian terkecil berdasarkan kriteria
         if db.antrian.count_documents({}) == 0:
             nomor_antrian_baru = 1
         else:
-            # Ambil dokumen terakhir dari koleksi berdasarkan tanggal, sesi, mcu
-            last_entry = db.antrian.find({
-                'tanggal': tanggal,
-                'sesi': sesi,
-                'mcu': mcu
-            }).sort('nomor_antrian', -1).limit(1)
+            last_item = db.antrian.find_one(sort=[('_id', -1)])
             
-            if last_entry.count() > 0:
-                nomor_antrian_baru = last_entry[0]['nomor_antrian'] + 1
-            else:
+            if (last_item['tanggal'] != tanggal and
+                         last_item['sesi'] != sesi and
+                         last_item['mcu'] != mcu):
+                
                 nomor_antrian_baru = 1
+            else:
+                nomor_antrian_baru = last_item['nomor_antrian'] + 1
 
         # Data pendaftaran baru
         data_pendaftaran = {
