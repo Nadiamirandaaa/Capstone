@@ -1,10 +1,7 @@
 
 function login() {
-    $(document).ready(function () {
-        $('#login-form').submit(function (event) {
-            event.preventDefault();
-            var nama = $('#inputName').val();
-            var nik = $('#inputNIK').val();
+            let nama = $('#inputName').val();
+            let nik = $('#inputNIK').val();
     
             $.ajax({
                 url: '/login',
@@ -13,19 +10,16 @@ function login() {
                     nama: nama,
                     nik: nik
                 },
-                success: function (response) {
-                    // Menyimpan token ke local storage atau session storage
-                    localStorage.setItem('token', response.token);
-                    // Redirect ke halaman lain atau lakukan aksi setelah login berhasil
-                    window.location.href = '/akun'; // Ganti dengan halaman setelah login berhasil
-                },
-                error: function (xhr, status, error) {
-                    var errorMessage = xhr.responseJSON.error;
-                    $('#error-message').text(errorMessage);
+                success: function(response) {
+                    if (response.result === "success") {
+                        document.cookie = "mytoken=" + response.token + "; path=/pendaftaranonline";
+                        window.location.replace("/pendaftaranonline");
+                    } else {
+                        alert(response["msg"]);
+                    }
                 }
+                
             });
-        });
-    });
 }
 
 function register() {
