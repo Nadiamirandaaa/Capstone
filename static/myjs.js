@@ -1,3 +1,10 @@
+function redirectToCorrectPage() {
+    if (document.referrer.includes("/login")) {
+        window.location.href = "/akun";
+    } else {
+        window.location.href = "/pendaftaranonline";
+    }
+}
 
 function login() {
             let nama = $('#inputName').val();
@@ -12,8 +19,9 @@ function login() {
                 },
                 success: function(response) {
                     if (response.result === "success") {
-                        document.cookie = "mytoken=" + response.token + "; path=/pendaftaranonline";
-                        window.location.replace("/pendaftaranonline");
+                        alert('User Login Berhasil');
+                        document.cookie = "mytoken=" + response.token;
+                        redirectToCorrectPage();
                     } else {
                         alert(response["msg"]);
                     }
@@ -23,33 +31,27 @@ function login() {
 }
 
 function register() {
-    $(document).ready(function() {
-        $('#registrationForm').submit(function(event) {
-            event.preventDefault();
-            var formData = $(this).serialize();
-            $.ajax({
-                type: 'POST',
-                url: '/register',
-                data: formData,
-                success: function(response) {
-                    if (response.status === 'error') {
-                        // Handle error message
-                        alert('Error: ' + response.message);
-                    } else if (response.status === 'success') {
-                        // Handle success message
-                        alert('Success: ' + response.message);
-                        if (response.redirect_url) {
-                            // Redirect to the provided URL
-                            window.location.href = response.redirect_url;
-                        }
-                    }
-                },
-                error: function(xhr, status, error) {
-                    // Handle errors with the request
-                    alert('Request Error: ' + error);
-                }
-            });
-        });
+    let nama = $('#inputName').val();
+    let nik = $('#inputNIK').val();
+    let gender = $('#inputGender').val();
+    let alamat = $('#inputAddress').val();
+
+    $.ajax({
+        type: 'POST',
+        url: '/register',
+        data: {
+            nama: nama,
+            nik: nik,
+            gender: gender,
+            alamat: alamat
+        },
+        success: function (response) {
+            if (response['result'] === 'success') {
+                alert('User registration berhasil!');
+                window.location.href = '/login';
+            } else {
+                alert(response['msg']);
+            }
+        }
     });
-    
 }

@@ -1,24 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Login | HealtyMe</title>
-	<link rel="stylesheet" href="/static/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-	<link rel="stylesheet" href="/static/css/style.css">
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-	<script src="/static/myjs.js"></script>
-</head>
-
-<body>
-
-	<!-- Start Navbar -->
-	{% include 'navbar.html' %}
-	<!-- End Navbar -->
-
-	<!-- Login Form -->
+{% block title %}HealtyMe - Login{% endblock %}
+{% block content %}
 	<div class="container">
 		<div class="login-form">
 		  <h2 class="logo-text">HealtyMe - Login</h2>
@@ -34,8 +17,4 @@
 			<p class="text-center mt-3">Belum Punya Akun? <a href="/register" class="register-link">Daftar Sekarang</a></p>
 		</div>
 	  </div>
-	<!-- End Login Form -->
-	
-</body>
-
-</html>
+{% endblock %}

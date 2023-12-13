@@ -88,7 +88,7 @@ def register():
     if request.method == 'POST':
         nama = request.form['nama']
         nik = request.form['nik']
-        jenis_kelamin = request.form['jenis_kelamin']
+        jenis_kelamin = request.form['gender']
         alamat = request.form['alamat']
 
         hashed_nik = hashlib.sha256(nik.encode()).hexdigest()
@@ -102,11 +102,11 @@ def register():
 
         existing_user = db.users.find_one({'nik': hashed_nik})
         if existing_user:
-            return jsonify({'status': 'error', 'message': 'NIK sudah terdaftar'}), 400
+            return jsonify({'result': 'error', 'message': 'NIK sudah terdaftar'})
 
         db.users.insert_one(user)
 
-        return jsonify({'status': 'success', 'message': 'Registrasi berhasil', 'redirect_url': '/login'})
+        return jsonify({'result': 'success', 'message': 'Registrasi berhasil', 'redirect_url': '/login'})
 
 @app.route('/')
 def home():
