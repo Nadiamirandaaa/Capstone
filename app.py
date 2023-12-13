@@ -23,6 +23,7 @@ db = client[DB_NAME]
 app = Flask(__name__)
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
+# _________________ Token User ________________________________________________
 def get_user_info():
     token_receive = request.cookies.get("mytoken")
     user_info = None
@@ -36,18 +37,42 @@ def get_user_info():
             pass
     return user_info
 
-# Context processor to inject user_info into templates
 @app.context_processor
 def inject_user_info():
     user_info = get_user_info()
     return dict(user_info=user_info)
 
-# Route to display login page
+# _________________ End Token User ________________________________________________
+
+# _________________ Token Admin ________________________________________________
+
+def get_admin_info():
+    token_receive = request.cookies.get("mytoken")
+    admininfo = None
+    if token_receive:
+        try:
+            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+            admininfo = db.admin.find_one({"admin": payload["id"]})
+        except jwt.ExpiredSignatureError:
+            pass
+        except jwt.exceptions.DecodeError:
+            pass
+    return admininfo
+
+@app.context_processor
+def inject_admin_info():
+    admininfo = get_admin_info()
+    return dict(admininfo=admininfo)
+
+# _________________ End Token Admin ________________________________________________
+
+
+# _________________ Login Page Display ________________________________________________
 @app.route('/login', methods=['GET'])
 def show_login():
     return render_template('login.html')
 
-# Route to perform login
+# _________________ Login Process ________________________________________________
 @app.route('/login', methods=['POST'])
 def login():
     if request.method == 'POST':
@@ -69,7 +94,7 @@ def login():
         else:
             return jsonify({'error': 'Invalid credentials'})
 
-
+# _________________ Encrypted Pages ________________________________________________
 @app.route('/pendaftaranonline', methods=['GET'])
 def show_pendaftaranonline():
     user_info = get_user_info()
@@ -86,16 +111,15 @@ def show_pendaftaranonline():
     else:
         return jsonify({'error': 'Data pengguna tidak ditemukan'})
 
+# _________________ Queue Registration ________________________________________________
 @app.route('/pendaftaranonline', methods=['POST'])
 def pendaftaranonline():
     if request.method == 'POST':
-        # nama = request.form['nama']
         tanggal = request.form['tanggal']
         sesi = request.form['sesi']
         mcu = request.form['mcu']
 
-        
-        # Cari nomor antrian terkecil berdasarkan kriteria
+
         if db.antrian.count_documents({"tanggal": tanggal,
         "sesi": sesi,
         "mcu": mcu}) == 0:
@@ -111,25 +135,22 @@ def pendaftaranonline():
             else:
                 nomor_antrian_baru = last_item['nomor_antrian'] + 1
 
-        # Data pendaftaran baru
         data_pendaftaran = {
-            # 'nama': nama,
             'tanggal': tanggal,
             'sesi': sesi,
             'mcu': mcu,
             'nomor_antrian': nomor_antrian_baru
         }
-
-        # Simpan data pendaftaran ke MongoDB
         db.antrian.insert_one(data_pendaftaran)
 
         return jsonify({'result': 'success','nomor_antrian': nomor_antrian_baru})
-    
+
+# _________________ Register Page Display ________________________________________________
 @app.route('/register', methods=['GET'])
 def show_register():
     return render_template('register.html')
 
-# Route to perform registration
+# _________________ Registration Process ________________________________________________
 @app.route('/register', methods=['POST'])
 def register():
     if request.method == 'POST':
@@ -155,16 +176,19 @@ def register():
 
         return jsonify({'result': 'success', 'message': 'Registrasi berhasil', 'redirect_url': '/login'})
 
+# _________________ Home Pages Display ________________________________________________
 @app.route('/')
 def home():
     user_info = get_user_info()
     return render_template('index.html', user_info=user_info)
 
+# _________________ Queue Pages Display ________________________________________________
 @app.route('/antrian')
 def antrian():
    token = request.cookies.get('token')
    return render_template('antrian.html',token=token)
 
+# _________________ Instruction Pages Display ________________________________________________
 @app.route('/petunjuk')
 def petunjuk():
    user_info = get_user_info()
@@ -178,6 +202,7 @@ def petunjukpendaftaran():
 def petunjukhasilpemeriksaan():
    return render_template('petunjukhasilpemeriksaan.html')
 
+# _________________ Article Pages Display ________________________________________________
 @app.route('/artikelkolesterol')
 def artikelkolesterol():
    return render_template('artikelkolesterol.html')
@@ -190,31 +215,35 @@ def artikelguladarah():
 def artikelurine():
    return render_template('artikelurine.html')
 
+# _________________ Account Pages Display ________________________________________________
 @app.route('/akun')
 def akun():
-   
    return render_template('akun.html')
+
+
+# _________________ Admin Pages Encrypted ________________________________________________
 @app.route('/admin',methods=['GET'])
 def homeAdmin():
-    user_info = get_user_info()
-    if not user_info:
-        return redirect(url_for("admin/login"))
+    admininfo = get_admin_info()
+    if not admininfo:
+        return redirect(url_for("show_loginAdmin"))
 
-    user_data = db.admin.find_one({'admin': user_info['admin']})  
+    admin_data = db.admin.find_one({'admin': admininfo['admin']})  
 
-    if user_data:
-        admin = user_data.get('admin')
-        password= user_data.get('password')
+    if admin_data:
+        admin = admin_data.get('admin')
+        password= admin_data.get('password')
 
-        return render_template('dashboard.html', admin=admin, password=password, user_info=user_info)
+        return render_template('dashboard.html', admin=admin, password=password, admininfo=admininfo)
     else:
         return jsonify({'error': 'Data pengguna tidak ditemukan'})
 
+# _________________ Admin Login Process ________________________________________________
 @app.route('/admin/login', methods=['POST'])
 def loginAdmin():
     if request.method == 'POST':
-        nama_received = request.form["admin"]
-        pass_received = request.form["password"]
+        nama_received = request.form["nama"]
+        pass_received = request.form["pass"]
 
 
         user = db.admin.find_one({'admin': nama_received, 'password': pass_received})
@@ -229,10 +258,12 @@ def loginAdmin():
             return response
         else:
             return jsonify({'error': 'Invalid credentials'})
-            
+
+# _________________ Login Admin Pages Display ________________________________________________         
 @app.route("/admin/login",methods=['GET'])
 def show_loginAdmin():
     return render_template("login-admin.html")
+
 
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5000, debug=True)

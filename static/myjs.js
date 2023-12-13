@@ -95,9 +95,9 @@ function logAdmin() {
         },
         success: function(response) {
             if (response.result === "success") {
-                alert('User Login Berhasil');
+                alert('Admin Login Berhasil');
                 document.cookie = "mytoken=" + response.token;
-                redirectToCorrectPage();
+                window.location.href = "/admin";
             } else {
                 alert(response["msg"]);
             }
