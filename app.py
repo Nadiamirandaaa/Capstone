@@ -69,15 +69,63 @@ def login():
         else:
             return jsonify({'error': 'Invalid credentials'})
 
-# Route to display pendaftaran online page
+
 @app.route('/pendaftaranonline', methods=['GET'])
 def show_pendaftaranonline():
     user_info = get_user_info()
     if not user_info:
         return redirect(url_for("login"))
-    return render_template('pendaftaranonline.html', user_info=user_info)
 
-# Route to display registration page
+    user_data = db.users.find_one({'nama': user_info['nama']})  
+
+    if user_data:
+        nama_pengguna = user_data.get('nama')
+        nik_pengguna = user_data.get('nik')
+
+        return render_template('pendaftaranonline.html', nama=nama_pengguna, nik=nik_pengguna, user_info=user_info)
+    else:
+        return jsonify({'error': 'Data pengguna tidak ditemukan'})
+
+@app.route('/pendaftaranonline', methods=['POST'])
+def pendaftaranonline():
+    if request.method == 'POST':
+        # nama = request.form['nama']
+        tanggal = request.form['tanggal']
+        sesi = request.form['sesi']
+        mcu = request.form['mcu']
+
+        count_antrian = db.antrian.count_documents({})
+        
+        # Cari nomor antrian terkecil berdasarkan kriteria
+        if db.antrian.count_documents({}) == 0:
+            nomor_antrian_baru = 1
+        else:
+            # Ambil dokumen terakhir dari koleksi berdasarkan tanggal, sesi, mcu
+            last_entry = db.antrian.find({
+                'tanggal': tanggal,
+                'sesi': sesi,
+                'mcu': mcu
+            }).sort('nomor_antrian', -1).limit(1)
+            
+            if last_entry.count() > 0:
+                nomor_antrian_baru = last_entry[0]['nomor_antrian'] + 1
+            else:
+                nomor_antrian_baru = 1
+
+        # Data pendaftaran baru
+        data_pendaftaran = {
+            # 'nama': nama,
+            'tanggal': tanggal,
+            'sesi': sesi,
+            'mcu': mcu,
+            'nomor_antrian': nomor_antrian_baru
+        }
+
+        # Simpan data pendaftaran ke MongoDB
+        db.antrian.insert_one(data_pendaftaran)
+
+        return jsonify({'result': 'success','nomor_antrian': nomor_antrian_baru})
+    
 @app.route('/register', methods=['GET'])
 def show_register():
     return render_template('register.html')

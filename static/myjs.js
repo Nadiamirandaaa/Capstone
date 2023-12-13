@@ -55,3 +55,29 @@ function register() {
         }
     });
 }
+function daftar(){
+    // let nama = $('#inputName').val();
+    let tanggal = $('#inputDate').val();
+    let sesi = $('#inputSession').val();
+    let mcu = $('#inputMCU').val();
+
+    $.ajax({
+        url: '/pendaftaranonline',
+        method: 'POST',
+        data: {
+            // nama: nama,
+            tanggal: tanggal,
+            sesi: sesi,
+            mcu: mcu
+        },
+        success: function(response) {
+            if (response["result"] === 'success') {
+                alert('Pendaftaran berhasil! Nomor antrian Anda: ' + response.nomor_antrian);
+                // Redirect ke halaman yang sesuai atau lakukan sesuatu setelah pendaftaran berhasil
+                // window.location.href = '/halaman-sukses';
+            } else {
+                alert(response['msg']);
+            }
+        }
+    });
+}
