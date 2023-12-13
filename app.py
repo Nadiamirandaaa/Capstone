@@ -9,7 +9,7 @@ from werkzeug.utils import secure_filename
 import os
 from os.path import join, dirname
 from dotenv import load_dotenv
-from functools import wraps
+
 
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
@@ -70,7 +70,7 @@ def inject_admin_info():
 # _________________ Login Page Display ________________________________________________
 @app.route('/login', methods=['GET'])
 def show_login():
-    return render_template('login.html')
+    return render_template('user/login.html')
 
 # _________________ Login Process ________________________________________________
 @app.route('/login', methods=['POST'])
@@ -107,7 +107,7 @@ def show_pendaftaranonline():
         nama_pengguna = user_data.get('nama')
         nik_pengguna = user_data.get('nik')
 
-        return render_template('pendaftaranonline.html', nama=nama_pengguna, nik=nik_pengguna, user_info=user_info)
+        return render_template('user/pendaftaranonline.html', nama=nama_pengguna, nik=nik_pengguna, user_info=user_info)
     else:
         return jsonify({'error': 'Data pengguna tidak ditemukan'})
 
@@ -148,7 +148,7 @@ def pendaftaranonline():
 # _________________ Register Page Display ________________________________________________
 @app.route('/register', methods=['GET'])
 def show_register():
-    return render_template('register.html')
+    return render_template('user/register.html')
 
 # _________________ Registration Process ________________________________________________
 @app.route('/register', methods=['POST'])
@@ -180,45 +180,45 @@ def register():
 @app.route('/')
 def home():
     user_info = get_user_info()
-    return render_template('index.html', user_info=user_info)
+    return render_template('user/index.html', user_info=user_info)
 
 # _________________ Queue Pages Display ________________________________________________
 @app.route('/antrian')
 def antrian():
    token = request.cookies.get('token')
-   return render_template('antrian.html',token=token)
+   return render_template('user/antrian.html',token=token)
 
 # _________________ Instruction Pages Display ________________________________________________
 @app.route('/petunjuk')
 def petunjuk():
    user_info = get_user_info()
-   return render_template('petunjuk.html',user_info=user_info)
+   return render_template('user/petunjuk.html',user_info=user_info)
 
 @app.route('/petunjukpendaftaran')
 def petunjukpendaftaran():
-   return render_template('petunjukpendaftaran.html')
+   return render_template('user/petunjukpendaftaran.html')
 
 @app.route('/petunjukhasilpemeriksaan')
 def petunjukhasilpemeriksaan():
-   return render_template('petunjukhasilpemeriksaan.html')
+   return render_template('user/petunjukhasilpemeriksaan.html')
 
 # _________________ Article Pages Display ________________________________________________
 @app.route('/artikelkolesterol')
 def artikelkolesterol():
-   return render_template('artikelkolesterol.html')
+   return render_template('user/artikelkolesterol.html')
 
 @app.route('/artikelguladarah')
 def artikelguladarah():
-   return render_template('artikelguladarah.html')
+   return render_template('user/artikelguladarah.html')
 
 @app.route('/artikelurine')
 def artikelurine():
-   return render_template('artikelurine.html')
+   return render_template('user/artikelurine.html')
 
 # _________________ Account Pages Display ________________________________________________
 @app.route('/akun')
 def akun():
-   return render_template('akun.html')
+   return render_template('user/akun.html')
 
 
 # _________________ Admin Pages Encrypted ________________________________________________
@@ -234,7 +234,7 @@ def homeAdmin():
         admin = admin_data.get('admin')
         password= admin_data.get('password')
 
-        return render_template('dashboard.html', admin=admin, password=password, admininfo=admininfo)
+        return render_template('admin/dashboard.html', admin=admin, password=password, admininfo=admininfo)
     else:
         return jsonify({'error': 'Data pengguna tidak ditemukan'})
 
@@ -262,7 +262,7 @@ def loginAdmin():
 # _________________ Login Admin Pages Display ________________________________________________         
 @app.route("/admin/login",methods=['GET'])
 def show_loginAdmin():
-    return render_template("login-admin.html")
+    return render_template("admin/login-admin.html")
 
 
 if __name__ == '__main__':
