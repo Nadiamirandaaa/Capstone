@@ -81,3 +81,27 @@ function daftar(){
         }
     });
 }
+
+function logAdmin() {
+    let nama = $('#inputName').val();
+    let pass = $('#inputPass').val();
+
+    $.ajax({
+        url: '/admin/login',
+        method: 'POST',
+        data: {
+            nama: nama,
+            pass: pass
+        },
+        success: function(response) {
+            if (response.result === "success") {
+                alert('User Login Berhasil');
+                document.cookie = "mytoken=" + response.token;
+                redirectToCorrectPage();
+            } else {
+                alert(response["msg"]);
+            }
+        }
+        
+    });
+}

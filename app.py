@@ -96,7 +96,9 @@ def pendaftaranonline():
 
         
         # Cari nomor antrian terkecil berdasarkan kriteria
-        if db.antrian.count_documents({}) == 0:
+        if db.antrian.count_documents({"tanggal": tanggal,
+        "sesi": sesi,
+        "mcu": mcu}) == 0:
             nomor_antrian_baru = 1
         else:
             last_item = db.antrian.find_one(sort=[('_id', -1)])
@@ -190,7 +192,47 @@ def artikelurine():
 
 @app.route('/akun')
 def akun():
+   
    return render_template('akun.html')
+@app.route('/admin',methods=['GET'])
+def homeAdmin():
+    user_info = get_user_info()
+    if not user_info:
+        return redirect(url_for("admin/login"))
+
+    user_data = db.admin.find_one({'admin': user_info['admin']})  
+
+    if user_data:
+        admin = user_data.get('admin')
+        password= user_data.get('password')
+
+        return render_template('dashboard.html', admin=admin, password=password, user_info=user_info)
+    else:
+        return jsonify({'error': 'Data pengguna tidak ditemukan'})
+
+@app.route('/admin/login', methods=['POST'])
+def loginAdmin():
+    if request.method == 'POST':
+        nama_received = request.form["admin"]
+        pass_received = request.form["password"]
+
+
+        user = db.admin.find_one({'admin': nama_received, 'password': pass_received})
+
+        if user:
+            token = jwt.encode({'id': nama_received, "exp": datetime.utcnow() + timedelta(seconds=60 * 60 * 24)}, SECRET_KEY, algorithm='HS256')
+            response = jsonify({
+                "result": "success",
+                "token": token
+            })
+            response.set_cookie('mytoken', token)
+            return response
+        else:
+            return jsonify({'error': 'Invalid credentials'})
+            
+@app.route("/admin/login",methods=['GET'])
+def show_loginAdmin():
+    return render_template("login-admin.html")
 
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5000, debug=True)
