@@ -72,9 +72,10 @@ function daftar(){
         },
         success: function(response) {
             if (response["result"] === 'success') {
-                alert('Pendaftaran berhasil! Nomor antrian Anda: ' + response.nomor_antrian);
-                // Redirect ke halaman yang sesuai atau lakukan sesuatu setelah pendaftaran berhasil
-                // window.location.href = '/halaman-sukses';
+                $('#nomorAntrian').text(response.nomor_antrian);
+                $('#tanggalAntrian').text(response.tanggal);
+                $('#sesiAntrian').text(response.sesi);
+                $('#modalNomorAntrian').modal('show');
             } else {
                 alert(response['msg']);
             }
@@ -104,4 +105,20 @@ function logAdmin() {
         }
         
     });
+}
+
+$(document).ready(function(){
+    // Menampilkan modal alur pendaftaran pasien ketika gambar di klik
+    $('[data-target="#modalPendaftaran"]').click(function(){
+        $('#modalPendaftaran').modal('show');
+    });
+
+    // Menampilkan modal alur cek hasil pemeriksaan ketika gambar di klik
+    $('[data-target="#modalPemeriksaan"]').click(function(){
+        $('#modalPemeriksaan').modal('show');
+    });
+});
+
+function refreshPage() {
+    location.reload();
 }

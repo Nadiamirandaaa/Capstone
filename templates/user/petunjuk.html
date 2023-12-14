@@ -18,26 +18,30 @@
 </div>
 <!-- End Hero -->
 
-<!-- Start Petunjuk -->
+<!-- Isi halaman -->
 <div class="petunjuk-section">
 	<div class="container">
 		<div class="row">
 			<div class="col-12 col-md-6 mb-4 mb-lg-0">
 				<div class="post-entry text-center d-flex flex-column align-items-center">
-					<a href="/petunjukpendaftaran" class="post-thumbnail"><img src="/static/gambar/icon-1.png"
-							alt="Image" class="img-fluid"></a>
+					<a href="#" class="post-thumbnail" data-toggle="modal" data-target="#modalPendaftaran">
+						<img src="/static/gambar/icon-1.png" alt="Image" class="img-fluid">
+					</a>
 					<div class="post-content-entry text-center">
-						<h3><a href="/petunjukpendaftaran">Alur Pendaftaran Pasien</a></h3>
+						<h3><a href="#" data-toggle="modal" data-target="#modalPendaftaran">Alur Pendaftaran Pasien</a>
+						</h3>
 					</div>
 				</div>
 			</div>
 
 			<div class="col-12 col-md-6 mb-4 mb-lg-0">
 				<div class="post-entry text-center d-flex flex-column align-items-center">
-					<a href="/petunjukhasilpemeriksaan" class="post-thumbnail"><img src="/static/gambar/icon-2.png"
-							alt="Image" class="img-fluid"></a>
+					<a href="#" class="post-thumbnail" data-toggle="modal" data-target="#modalPemeriksaan">
+						<img src="/static/gambar/icon-2.png" alt="Image" class="img-fluid">
+					</a>
 					<div class="post-content-entry text-center">
-						<h3><a href="/petunjukhasilpemeriksaan">Alur Cek Hasil Pemeriksaan</a></h3>
+						<h3><a href="#" data-toggle="modal" data-target="#modalPemeriksaan">Alur Cek Hasil
+								Pemeriksaan</a></h3>
 					</div>
 				</div>
 			</div>
@@ -45,5 +49,131 @@
 	</div>
 </div>
 <!-- End Petunjuk -->
+
+<!-- Modal Pendaftaran Pasien -->
+<div class="modal fade" id="modalPendaftaran" tabindex="-1" role="dialog" aria-labelledby="modalPendaftaranLabel"
+	aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="modalPendaftaranLabel">Alur Pendaftaran Pasien</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<!-- Start Petunjuk Pasien -->
+				<div class="container-xxl py-5">
+					<div class="container pt-5">
+						<div class="row g-4">
+							<div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+								<div class="petunjuk text-center bg-light h-100 p-5 pt-0">
+									<div class="petunjuk-icon">
+										<img src="/static/gambar/no1.png" alt="Icon">
+									</div>
+									<h4 class="mb-3">Pemanggilan</h4>
+									<p> Tunggu Hingga Pemanggilan Nomor Antrian Anda </p>
+								</div>
+							</div>
+							<div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+								<div class="petunjuk text-center bg-light h-100 p-5 pt-0">
+									<div class="petunjuk-icon">
+										<img src="/static/gambar/no2.png" alt="Icon">
+									</div>
+									<h4 class="mb-3">Pemeriksaan</h4>
+									<p> Mulai Pemeriksaan Pasien Sesuai Prosedur MCU. </p>
+									<p> Setelah melakukan pemeriksaan pasien akan diarahkan oleh petugas untuk menunggu
+										hasil pemeriksaan di akun pasien</p>
+								</div>
+							</div>
+							<div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+								<div class="petunjuk text-center bg-light h-100 p-5 pt-0">
+									<div class="petunjuk-icon">
+										<img src="/static/gambar/no3.png" alt="Icon">
+									</div>
+									<h4 class="mb-3">Hasil Pemeriksaan</h4>
+									<p> 1. Klik Akun dipojok kanan atas </p>
+									<p> 2. Pilih Hasil Pemeriksaan Medical Check Up (MCU), maka pasien bisa melihat
+										hasil pemeriksaan yang sudah dilakukan </p>
+									<p> 3. Kemudian pasien bisa melakukan screensot untuk menyimpan hasil pemeriksaan
+										MCU </p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- End Petunjuk -->
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal Cek Hasil Pemeriksaan -->
+<div class="modal fade" id="modalPemeriksaan" tabindex="-1" role="dialog" aria-labelledby="modalPemeriksaanLabel"
+	aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="modalPemeriksaanLabel">Alur Cek Hasil Pemeriksaan</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<!-- Start Petunjuk Pasien -->
+				<div class="container-xxl py-5">
+					<div class="container pt-5">
+						<div class="row g-4">
+							<div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+								<div class="petunjuk text-center bg-light h-100 p-5 pt-0">
+									<div class="petunjuk-icon">
+										<img src="/static/gambar/no1.png" alt="Icon">
+									</div>
+									<h4 class="mb-3">Pasien Lama Sudah Punya Akun:</h4>
+									<p> 1. Klik Login di pojok kanan atas </p>
+									<p> 2. Kemudian masukkan Nama dan No NIK Pasien </p>
+								</div>
+							</div>
+							<div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+								<div class="petunjuk text-center bg-light h-100 p-5 pt-0">
+									<div class="petunjuk-icon">
+										<img src="/static/gambar/no2.png" alt="Icon">
+									</div>
+									<h4 class="mb-3">Pasien Baru Belum Punya Akun:</h4>
+									<p> Jika anda merupakan Pasien baru yang belum punya Akun maka pasien harus
+										Registrasi terlebih dahulu</p>
+									<p> 1. Klik Login di pojok kanan atas </p>
+									<p> 2. Pada laman Login, klik Registrasi </p>
+									<p> 3. Kemudian isi Data Diri Pasien berupa Nama, NIK, Jenis Kelamin dan Alamat </p>
+									<p> 4. Jika sudah berhasil Registrasi, selanjutnya Pasien bisa melanjutkan Login
+										seperti yang sudah dijelaskan sebelumnya yaitu memasukkan Nama dan No NIK Pasien
+									</p>
+								</div>
+							</div>
+							<div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+								<div class="petunjuk text-center bg-light h-100 p-5 pt-0">
+									<div class="petunjuk-icon">
+										<img src="/static/gambar/no3.png" alt="Icon">
+									</div>
+									<h4 class="mb-3">Pendaftaran Online:</h4>
+									<p> 1. Masukkan Data Pasien berupa Nama dan No NIK Pasien </p>
+									<p> 2. Pilih Medical Check Up (MCU) Tujuan, Tanggal dan Jam Pemeriksaan </p>
+									<p> 3. Screensot Tampilan Nomor Antrian </p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 {% endblock %}
 {% set footer = True %}

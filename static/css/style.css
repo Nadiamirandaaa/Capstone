@@ -249,3 +249,19 @@ a {
   border-radius: 120px;
   transition: .5s;
 }
+
+
+@media (min-width: 992px) {
+  .modal-dialog {
+      max-width: 87%;
+      margin: 1.75rem auto; 
+  }
+}
+
+
+@media (max-width: 991px) {
+  .modal-dialog {
+      max-width: calc(100% - 30px); 
+      margin: 15px auto; 
+}
+}

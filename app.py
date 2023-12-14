@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 import hashlib
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 
-from werkzeug.utils import secure_filename
 
 import os
 from os.path import join, dirname
@@ -143,7 +142,10 @@ def pendaftaranonline():
         }
         db.antrian.insert_one(data_pendaftaran)
 
-        return jsonify({'result': 'success','nomor_antrian': nomor_antrian_baru})
+        return jsonify({'result': 'success','tanggal': tanggal,
+            'sesi': sesi,
+            'mcu': mcu,
+            'nomor_antrian': nomor_antrian_baru})
 
 # _________________ Register Page Display ________________________________________________
 @app.route('/register', methods=['GET'])
