@@ -71,7 +71,7 @@ function register() {
                 Swal.fire({
                     title: "Berhasil melakukan registrasi!",
                     text: response.message,
-                    icon: "succes"
+                    icon: "success"
                   }).then((result) => {
                         window.location.href = '/login';
                 });
@@ -127,7 +127,9 @@ function daftar(){
                     title: "Gagal melakukan pendaftaran!",
                     text: response.message,
                     icon: "error"
-                  });
+                  }).then((result) => {
+                    location.reload();
+            });
             }
         },
         error : function(response){

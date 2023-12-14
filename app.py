@@ -3,6 +3,7 @@ import jwt
 from datetime import datetime, timedelta
 import hashlib
 from flask import Flask, render_template, jsonify, request, redirect, url_for
+import locale
 
 
 import os
@@ -18,6 +19,8 @@ DB_NAME =  os.environ.get("DB_NAME")
 
 client = MongoClient(MONGODB_URI)
 db = client[DB_NAME]
+
+locale.setlocale(locale.LC_TIME, 'id_ID')
 
 app = Flask(__name__)
 SECRET_KEY = os.environ.get("SECRET_KEY")
@@ -120,14 +123,17 @@ def pendaftaranonline():
         tanggal = request.form['tanggal']
         sesi = request.form['sesi']
         mcu = request.form['mcu']
-        
-        if db.antrian.find_one({"tanggal": tanggal,
-        "nama": nama}):
-            return jsonify({'result': 'error', 'message': f'Anda sudah mendaftar pada tanggal {tanggal}'})
 
-        if not (tanggal and sesi and mcu):
+        user_info = get_user_info()  if get_user_info() else {'_id': None}
+
+        
+        if not (tanggal and sesi and mcu and nama):
             return jsonify({'result': 'error', 'message': 'Data tidak lengkap'})
 
+        if db.antrian.find_one({"user_id": user_info["_id"], "tanggal": tanggal,"nama": nama}):
+            tanggal_obj = datetime.strptime(tanggal, '%Y-%m-%d')
+            tanggal_formatted = tanggal_obj.strftime('%d %b %Y')
+            return jsonify({'result': 'error', 'message': f'Anda sudah mendaftar pada tanggal {tanggal_formatted} ({tanggal_obj.strftime("%A")})'})
 
         # _________________ Antrian _________________________
         if db.antrian.count_documents({"tanggal": tanggal,
@@ -146,6 +152,7 @@ def pendaftaranonline():
                 nomor_antrian_baru = last_item['nomor_antrian'] + 1
 
         data_pendaftaran = {
+            'user_id': user_info["_id"],
             'nama': nama,
             'nomor_antrian': nomor_antrian_baru,
             'tanggal': tanggal,
