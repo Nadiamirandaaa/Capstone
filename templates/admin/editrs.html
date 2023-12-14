@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="author" content="Untree.co">
+	<link rel="shortcut icon" href="/static/gambar/favicon.png">
+
+	<meta name="description" content="" />
+	<meta name="keywords" content="bootstrap, bootstrap4" />
+
+	<!-- Bootstrap CSS -->
+	<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+	<link href="/static/css/style.css" rel="stylesheet">
+	<title> Edit Rumah Sakit | HealtyMe </title>
+
+</head>
+
+<script>
+    function saveData() {
+        let formData = {
+            'nama_mcu': $('#nama_mcu').val(),
+            'detailrs_mcu': $('#detailrs_mcu').val()
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/save_data',
+            data: formData,
+            success: function(data) {
+                alert(data.message);
+                if (data.success) {
+                    window.location.replace("/admin/detailrs/" + formData['nama_mcu']);
+                }
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    function deleteData() {
+        let formData = {
+            'nama_mcu': $('#nama_mcu').val(),
+            'detailrs_mcu': $('#detailrs_mcu').val()
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: '/delete_data',
+            data: formData,
+            success: function(data) {
+                alert(data.message);
+                if (data.success) {
+                    window.location.replace("/admin/detailrs/" + formData['nama_mcu']);
+                }
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+</script>
+
+<body>
+
+		<!-- Start Hero -->
+		<div class="hero">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-6 col-md-8">
+						<div class="intro-excerpt">
+							<h3>HealtyMe</h3>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Hero -->
+
+        <!-- Start Edit Rumah Sakit -->
+        <div class="mcuform">
+            <form id="mcuForm">
+                <div class="mb-3 mx-5">
+                    <label for="nama_mcu" class="form-label">Nama Medical Check Up (MCU)</label>
+                    <input type="text" class="form-control" id="nama_mcu" name="nama_mcu">
+                </div>
+                <div class="mb-3 mx-5">
+                    <label for="detail_mcu" class="form-label">Detail Medical Check Up (MCU)</label>
+                    <textarea class="form-control" id="detailrs_mcu" name="detailrs_mcu" rows="5"></textarea>
+                </div>
+                <div class="button-group mx-5">
+                    <button type="button" class="btn btn-secondary me-2 ms-auto" onclick="deleteData()">Hapus</button>
+                    <button type="button" class="btn btn-secondary me-2 ms-auto" onclick="saveData()">Simpan</button>
+                </div>
+            </form>
+        </div>
+        <!-- End Edit Rumah Sakit -->
+
+</body>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</html>

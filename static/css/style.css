@@ -265,3 +265,22 @@ a {
       margin: 15px auto; 
 }
 }
+
+.mcuform {
+  padding: 3rem 6rem; 
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.button-group .btn {
+  margin-top: 5px;
+}
+
+.card {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
