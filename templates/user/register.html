@@ -10,7 +10,7 @@
                 <h2 class="logo-text">HealtyMe - Registrasi</h2>
                     <div class="mb-3 input-group">
                         <span for="inputName" class="input-group-text w-25">Nama</span>
-                        <input type="text" class="form-control" id="inputName" placeholder="Masukkan nama Anda" name="nama">
+                        <input type="text" class="form-control" id="inputName" placeholder="Masukkan nama Anda" oninput="this.value = this.value.toUpperCase()" name="nama">
                     </div>
                     <div class="mb-3 input-group">
                         <span for="inputNIK" class="input-group-text w-25">NIK</span>
@@ -26,7 +26,7 @@
                     </div>
                     <div class="mb-3 input-group">
                         <span for="inputAddress" class="input-group-text w-25">Alamat</span>
-                        <textarea class="form-control" id="inputAddress" rows="3" placeholder="Masukkan alamat Anda" name="alamat"></textarea>
+                        <textarea class="form-control" id="inputAddress" rows="3" placeholder="Masukkan alamat Anda" name="alamat" oninput="this.value = this.value.toUpperCase()"></textarea>
                     </div>
                     <button type="submit" class="btn btn-secondary mt-4 login-btn d-block mx-auto" onclick="register()">Registrasi</button>
                     <p class="text-center mt-3">Sudah Punya Akun? <a href="/login" class="register-link">Login</a></p>

@@ -77,7 +77,7 @@ def login():
     if request.method == 'POST':
         nama_received = request.form["nama"]
         nik_received = request.form["nik"]
-
+        
         hashed_nik = hashlib.sha256(nik_received.encode("utf-8")).hexdigest()
 
         user = db.users.find_one({'nama': nama_received, 'nik': hashed_nik})
@@ -86,12 +86,13 @@ def login():
             token = jwt.encode({'id': nama_received, "exp": datetime.utcnow() + timedelta(seconds=60 * 60 * 24)}, SECRET_KEY, algorithm='HS256')
             response = jsonify({
                 "result": "success",
-                "token": token
+                "token": token,
+                'message': 'Selamat datang'
             })
             response.set_cookie('mytoken', token)
             return response
         else:
-            return jsonify({'error': 'Invalid credentials'})
+            return jsonify({'error': 'Invalid credentials','message': 'Data tidak valid'})
 
 # _________________ Encrypted Pages ________________________________________________
 @app.route('/pendaftaranonline', methods=['GET'])
@@ -114,9 +115,15 @@ def show_pendaftaranonline():
 @app.route('/pendaftaranonline', methods=['POST'])
 def pendaftaranonline():
     if request.method == 'POST':
+
+        nama = request.form['nama']
         tanggal = request.form['tanggal']
         sesi = request.form['sesi']
         mcu = request.form['mcu']
+        
+        if db.antrian.find_one({"tanggal": tanggal,
+        "nama": nama}):
+            return jsonify({'result': 'error', 'message': f'Anda sudah mendaftar pada tanggal {tanggal}'})
 
         if not (tanggal and sesi and mcu):
             return jsonify({'result': 'error', 'message': 'Data tidak lengkap'})
@@ -139,6 +146,8 @@ def pendaftaranonline():
                 nomor_antrian_baru = last_item['nomor_antrian'] + 1
 
         data_pendaftaran = {
+            'nama': nama,
+            'nomor_antrian': nomor_antrian_baru,
             'tanggal': tanggal,
             'sesi': sesi,
             'mcu': mcu,
@@ -165,6 +174,9 @@ def register():
         jenis_kelamin = request.form['gender']
         alamat = request.form['alamat']
 
+        if not (nama and nik and jenis_kelamin and alamat):
+            return jsonify({'result': 'error', 'message': 'Harap Isi Semua Data'})
+        
         hashed_nik = hashlib.sha256(nik.encode()).hexdigest()
 
         user = {

@@ -19,13 +19,33 @@ function login() {
                 },
                 success: function(response) {
                     if (response.result === "success") {
-                        alert('User Login Berhasil');
+                        Swal.fire({
+                            title: "Berhasil melakukan login!",
+                            text: response.message,
+                            icon: "success"
+                          }).then((result) => {
+                                window.location.href = '/akun';
+                        });
                         document.cookie = "mytoken=" + response.token;
-                        redirectToCorrectPage();
                     } else {
-                        alert(response["msg"]);
+                        Swal.fire({
+                            title: "Gagal melakukan login!",
+                            text: response.message,
+                            icon: "error"
+                          });
                     }
+                },
+                error : function(response){
+                    if (response['result'] === 'error') {
+                        Swal.fire({
+                            title: "Gagal melakukan login!",
+                            text: response.message,
+                            icon: "error"
+                          }).then((result) => {
+                                location.reload();
+                        });
                 }
+            }
                 
             });
 }
@@ -35,6 +55,7 @@ function register() {
     let nik = $('#inputNIK').val();
     let gender = $('#inputGender').val();
     let alamat = $('#inputAddress').val();
+
 
     $.ajax({
         type: 'POST',
@@ -47,12 +68,35 @@ function register() {
         },
         success: function (response) {
             if (response['result'] === 'success') {
-                alert('User registration berhasil!');
-                window.location.href = '/login';
+                Swal.fire({
+                    title: "Berhasil melakukan registrasi!",
+                    text: response.message,
+                    icon: "succes"
+                  }).then((result) => {
+                        window.location.href = '/login';
+                });
+                // window.location.href = '/login';
             } else {
-                alert(response['msg']);
+                Swal.fire({
+                    title: "Gagal melakukan registrasi!",
+                    text: response.message,
+                    icon: "error"
+                  }).then((result) => {
+                    location.reload();
+            });
             }
+        },
+        error : function(response){
+            if (response['result'] === 'error') {
+                Swal.fire({
+                    title: "Gagal melakukan registrasi!",
+                    text: response.message,
+                    icon: "error"
+                  }).then((result) => {
+                        location.reload();
+                });
         }
+    }
     });
 }
 function daftar(){
@@ -85,7 +129,18 @@ function daftar(){
                     icon: "error"
                   });
             }
+        },
+        error : function(response){
+            if (response['result'] === 'error') {
+                Swal.fire({
+                    title: "Gagal melakukan pendaftaran!",
+                    text: response.message,
+                    icon: "error"
+                  }).then((result) => {
+                        location.reload();
+                });
         }
+    }
     });
 }
 
