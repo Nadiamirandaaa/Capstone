@@ -118,7 +118,11 @@ def pendaftaranonline():
         sesi = request.form['sesi']
         mcu = request.form['mcu']
 
+        if not (tanggal and sesi and mcu):
+            return jsonify({'result': 'error', 'message': 'Data tidak lengkap'})
 
+
+        # _________________ Antrian _________________________
         if db.antrian.count_documents({"tanggal": tanggal,
         "sesi": sesi,
         "mcu": mcu}) == 0:
