@@ -188,7 +188,8 @@ def pendaftaranonline():
                 jam = jam_awal
             else:
                 nomor_antrian_baru = last_item['nomor_antrian'] + 1
-                jam = last_item['jam'] + durasi_per_antrian 
+                last_jam = datetime.strptime(last_item['jam'], '%H:%M')
+                jam = last_jam + durasi_per_antrian 
 
         data_pendaftaran = {
             'user_id': user_info["_id"],
