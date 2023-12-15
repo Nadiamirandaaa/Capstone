@@ -158,14 +158,6 @@ def pendaftaranonline():
         else:
             return jsonify({'result': 'error', 'message': 'Sesi tidak valid'})
         
-        # waktu_sekarang = datetime.now().time()
-        # if waktu_sekarang > jam_akhir.time():
-        #     return jsonify({'result': 'error', 'message': 'Kuota pendaftaran untuk sesi ini telah habis'})
-
-        
-        # jam_akhir_hari = datetime.strptime('18:00', '%H:%M').time()
-        # if waktu_sekarang > jam_akhir_hari:
-        #     return jsonify({'result': 'error', 'message': 'Kuota pendaftaran untuk hari ini telah habis'})
 
         if db.antrian.find_one({"user_id": user_info["_id"], "tanggal": tanggal_formatted}):
             return jsonify({'result': 'error', 'message': f'Anda sudah mendaftar pada Hari {hari}, {tanggal_formatted} '})
@@ -262,7 +254,14 @@ def home():
 @app.route('/antrian')
 def antrian():
    token = request.cookies.get('token')
-   return render_template('user/antrian.html',token=token)
+   data_antrian = list(db.antrian.aggregate([
+        {"$group": {
+        "_id": "$mcu",
+        "totalPendaftar": {"$sum": 1}
+    }}
+    ]))
+   
+   return render_template('user/antrian.html',token=token,data_antrian=data_antrian)
 
 # _________________ Instruction Pages Display ________________________________________________
 @app.route('/petunjuk')
