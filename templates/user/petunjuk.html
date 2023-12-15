@@ -22,21 +22,25 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-4 mx-auto">
-				<div class="post-entry text-center d-flex flex-column align-items-center">
-					<div class="post-content-entry text-center">
-						<img src="/static/gambar/icon-1.png" alt="Image" class="post-thumbnail img-fluid" data-toggle="modal" data-target="#modalPendaftaran">
-						<h3>Alur Pendaftaran Pasien</h3>
+				<div class="card shadow p-3 mb-5 bg-body-tertiary rounded">
+					<div class="post-entry text-center d-flex flex-column align-items-center">
+						<div class="post-content-entry text-center">
+							<img src="/static/gambar/icon-1.png" alt="Image" class="post-thumbnail img-fluid" data-toggle="modal" data-target="#modalPendaftaran">
+							<h3>Alur Pendaftaran Pasien</h3>
+						</div>
 					</div>
 				</div>
 			</div>
-
-			<div class="col-4 mx-auto">
-				<div class="post-entry text-center d-flex flex-column align-items-center">
-					<div class="post-content-entry text-center">
-						<img src="/static/gambar/icon-2.png" alt="Image" class="post-thumbnail img-fluid" data-toggle="modal" data-target="#modalPendaftaran">
-						<h3>Alur Cek HasilPemeriksaan</h3>
+			<div class="col-4 mx-auto ">
+				<div class="shadow p-3 mb-5 bg-body-tertiary rounded card">
+					<div class="post-entry text-center d-flex flex-column align-items-center">
+						<div class="post-content-entry text-center">
+							<img src="/static/gambar/icon-2.png" alt="Image" class="post-thumbnail img-fluid" data-toggle="modal" data-target="#modalPemeriksaan">
+							<h3>Alur Cek HasilPemeriksaan</h3>
+						</div>
 					</div>
 				</div>
+				
 			</div>
 		</div>
 	</div>
@@ -44,12 +48,12 @@
 <!-- End Petunjuk -->
 
 <!-- Modal Pendaftaran Pasien -->
-<div class="modal fade" id="modalPendaftaran" tabindex="-1" role="dialog" aria-labelledby="modalPendaftaranLabel"
+<div class="modal fade" id="modalPemeriksaan" tabindex="-1" role="dialog" aria-labelledby="modalPendaftaranLabel"
 	aria-hidden="true">
 	<div class="modal-dialog modal-xl" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="modalPendaftaranLabel">Alur Pendaftaran Pasien</h5>
+				<h5 class="modal-title" id="modalPendaftaranLabel">Alur Pemeriksaan Pasien</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -102,14 +106,14 @@
 			</div>
 		</div>
 	</div>
-
+</div>
 <!-- Modal Cek Hasil Pemeriksaan -->
-<div class="modal fade" id="modalPemeriksaan" tabindex="-1" role="dialog" aria-labelledby="modalPemeriksaanLabel"
+<div class="modal fade" id="modalPendaftaran" tabindex="-1" role="dialog" aria-labelledby="modalPemeriksaanLabel"
 	aria-hidden="true">
 	<div class="modal-dialog modal-xl" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="modalPemeriksaanLabel">Alur Cek Hasil Pemeriksaan</h5>
+				<h5 class="modal-title" id="modalPemeriksaanLabel">Alur Pendaftaran</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -168,4 +172,3 @@
 </div>
 
 {% endblock %}
-{% set footer = True %}
