@@ -24,7 +24,7 @@ function login() {
                             text: response.message,
                             icon: "success"
                           }).then((result) => {
-                                window.location.href = '/akun';
+                            redirectToCorrectPage();
                         });
                         document.cookie = "mytoken=" + response.token;
                     } else {
@@ -189,3 +189,8 @@ function refreshPage() {
     location.reload();
 }
 
+function sign_out() {
+    $.removeCookie("mytoken", { path: "/" });
+    alert("Signed out!");
+    window.location.href = "/login";
+  }
