@@ -16,13 +16,14 @@ load_dotenv(dotenv_path)
 MONGODB_URI = os.environ.get("MONGODB_URI")
 DB_NAME =  os.environ.get("DB_NAME")
 
-client = MongoClient(MONGODB_URI)
-db = client[DB_NAME]
+client = MongoClient("mongodb+srv://capgemini:capstone@cluster0.il5vinp.mongodb.net/?retryWrites=true&w=majority")
+db = client.capstone
 
 locale.setlocale(locale.LC_TIME, 'id_ID')
 
 app = Flask(__name__)
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = "34567898ygjh4wcxb323g767gfsg755gje2gbkl"
+
 
 
 # _________________ Token User ________________________________________________
