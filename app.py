@@ -146,7 +146,7 @@ def pendaftaranonline():
         if sesi == "pagi":
             jam_awal = datetime.strptime('08:00', '%H:%M')
             jam_akhir = datetime.strptime('12:00', '%H:%M')
-            durasi_per_antrian = timedelta(minutes=15)
+            durasi_per_antrian = timedelta(minutes=60)
         elif sesi == "siang":
             jam_awal = datetime.strptime('12:30', '%H:%M')
             jam_akhir = datetime.strptime('14:30', '%H:%M')
@@ -154,7 +154,7 @@ def pendaftaranonline():
         elif sesi == "sore":
             jam_awal = datetime.strptime('15:00', '%H:%M')
             jam_akhir = datetime.strptime('18:00', '%H:%M')
-            durasi_per_antrian = timedelta(minutes=20)
+            durasi_per_antrian = timedelta(minutes=15)
         else:
             return jsonify({'result': 'error', 'message': 'Sesi tidak valid'})
         
@@ -190,6 +190,8 @@ def pendaftaranonline():
                 nomor_antrian_baru = last_item['nomor_antrian'] + 1
                 last_jam = datetime.strptime(last_item['jam'], '%H:%M')
                 jam = last_jam + durasi_per_antrian 
+                if jam >= jam_akhir:
+                    return jsonify({'result': 'error', 'message': f'Maaf Untuk Sesi {sesi} hari {hari}, {tanggal_formatted} sudah habis'})
 
         data_pendaftaran = {
             'user_id': user_info["_id"],
