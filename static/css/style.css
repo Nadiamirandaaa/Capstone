@@ -251,21 +251,6 @@ a {
 }
 
 
-@media (min-width: 992px) {
-  .modal-dialog {
-      max-width: 87%;
-      margin: 1.75rem auto; 
-  }
-}
-
-
-@media (max-width: 991px) {
-  .modal-dialog {
-      max-width: calc(100% - 30px); 
-      margin: 15px auto; 
-}
-}
-
 .mcuform {
   padding: 3rem 6rem; 
 }

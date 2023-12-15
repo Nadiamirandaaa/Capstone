@@ -22,26 +22,19 @@
 <div class="petunjuk-section">
 	<div class="container">
 		<div class="row">
-			<div class="col-12 col-md-6 mb-4 mb-lg-0">
-				<div class="post-entry text-center d-flex flex-column align-items-center">
-					<a href="#" class="post-thumbnail" data-toggle="modal" data-target="#modalPendaftaran">
-						<img src="/static/gambar/icon-1.png" alt="Image" class="img-fluid">
-					</a>
-					<div class="post-content-entry text-center">
-						<h3><a href="#" data-toggle="modal" data-target="#modalPendaftaran">Alur Pendaftaran Pasien</a>
-						</h3>
+			<div class="col-md-4 mx-auto">
+				<div class="card shadow p-3 mb-5 bg-body-tertiary rounded" data-toggle="modal" data-target="#modalPendaftaran" style="cursor: pointer;">
+					<div class="post-entry text-center d-flex flex-column align-items-center">
+							<img src="/static/gambar/icon-1.png" alt="Image" class="img-fluid post-thumbnail">
+							<h3 class="post-content-entry text-center">Alur Pendaftaran Pasien</h3>
 					</div>
 				</div>
 			</div>
-
-			<div class="col-12 col-md-6 mb-4 mb-lg-0">
-				<div class="post-entry text-center d-flex flex-column align-items-center">
-					<a href="#" class="post-thumbnail" data-toggle="modal" data-target="#modalPemeriksaan">
-						<img src="/static/gambar/icon-2.png" alt="Image" class="img-fluid">
-					</a>
-					<div class="post-content-entry text-center">
-						<h3><a href="#" data-toggle="modal" data-target="#modalPemeriksaan">Alur Cek Hasil
-								Pemeriksaan</a></h3>
+			<div class="col-md-4 mx-auto">
+				<div class="card shadow p-3 mb-5 bg-body-tertiary rounded" data-toggle="modal" data-target="#modalPendaftaran" style="cursor: pointer;">
+					<div class="post-entry text-center d-flex flex-column align-items-center">
+						<img src="/static/gambar/icon-2.png" alt="Image" class="img-fluid post-thumbnail">
+						<h3 class="post-content-entry text-center">Alur Cek HasilPemeriksaan</h3>
 					</div>
 				</div>
 			</div>
@@ -53,7 +46,7 @@
 <!-- Modal Pendaftaran Pasien -->
 <div class="modal fade" id="modalPendaftaran" tabindex="-1" role="dialog" aria-labelledby="modalPendaftaranLabel"
 	aria-hidden="true">
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="modalPendaftaranLabel">Alur Pendaftaran Pasien</h5>
@@ -63,41 +56,39 @@
 			</div>
 			<div class="modal-body">
 				<!-- Start Petunjuk Pasien -->
-				<div class="container-xxl py-5">
-					<div class="container pt-5">
-						<div class="row g-4">
-							<div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-								<div class="petunjuk text-center bg-light h-100 p-5 pt-0">
-									<div class="petunjuk-icon">
-										<img src="/static/gambar/no1.png" alt="Icon">
-									</div>
-									<h4 class="mb-3">Pemanggilan</h4>
-									<p> Tunggu Hingga Pemanggilan Nomor Antrian Anda </p>
+				<div class="container pt-5">
+					<div class="row g-4">
+						<div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+							<div class="petunjuk text-center bg-light h-100 p-5 pt-0">
+								<div class="petunjuk-icon">
+									<img src="/static/gambar/no1.png" alt="Icon">
 								</div>
+								<h4 class="mb-3">Pemanggilan</h4>
+								<p> Tunggu Hingga Pemanggilan Nomor Antrian Anda </p>
 							</div>
-							<div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-								<div class="petunjuk text-center bg-light h-100 p-5 pt-0">
-									<div class="petunjuk-icon">
-										<img src="/static/gambar/no2.png" alt="Icon">
-									</div>
-									<h4 class="mb-3">Pemeriksaan</h4>
-									<p> Mulai Pemeriksaan Pasien Sesuai Prosedur MCU. </p>
-									<p> Setelah melakukan pemeriksaan pasien akan diarahkan oleh petugas untuk menunggu
-										hasil pemeriksaan di akun pasien</p>
+						</div>
+						<div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+							<div class="petunjuk text-center bg-light h-100 p-5 pt-0">
+								<div class="petunjuk-icon">
+									<img src="/static/gambar/no2.png" alt="Icon">
 								</div>
+								<h4 class="mb-3">Pemeriksaan</h4>
+								<p> Mulai Pemeriksaan Pasien Sesuai Prosedur MCU. </p>
+								<p> Setelah melakukan pemeriksaan pasien akan diarahkan oleh petugas untuk menunggu
+									hasil pemeriksaan di akun pasien</p>
 							</div>
-							<div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-								<div class="petunjuk text-center bg-light h-100 p-5 pt-0">
-									<div class="petunjuk-icon">
-										<img src="/static/gambar/no3.png" alt="Icon">
-									</div>
-									<h4 class="mb-3">Hasil Pemeriksaan</h4>
-									<p> 1. Klik Akun dipojok kanan atas </p>
-									<p> 2. Pilih Hasil Pemeriksaan Medical Check Up (MCU), maka pasien bisa melihat
-										hasil pemeriksaan yang sudah dilakukan </p>
-									<p> 3. Kemudian pasien bisa melakukan screensot untuk menyimpan hasil pemeriksaan
-										MCU </p>
+						</div>
+						<div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+							<div class="petunjuk text-center bg-light h-100 p-5 pt-0">
+								<div class="petunjuk-icon">
+									<img src="/static/gambar/no3.png" alt="Icon">
 								</div>
+								<h4 class="mb-3">Hasil Pemeriksaan</h4>
+								<p> 1. Klik Akun dipojok kanan atas </p>
+								<p> 2. Pilih Hasil Pemeriksaan Medical Check Up (MCU), maka pasien bisa melihat
+									hasil pemeriksaan yang sudah dilakukan </p>
+								<p> 3. Kemudian pasien bisa melakukan screensot untuk menyimpan hasil pemeriksaan
+									MCU </p>
 							</div>
 						</div>
 					</div>
@@ -114,7 +105,7 @@
 <!-- Modal Cek Hasil Pemeriksaan -->
 <div class="modal fade" id="modalPemeriksaan" tabindex="-1" role="dialog" aria-labelledby="modalPemeriksaanLabel"
 	aria-hidden="true">
-	<div class="modal-dialog" role="document">
+	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="modalPemeriksaanLabel">Alur Cek Hasil Pemeriksaan</h5>

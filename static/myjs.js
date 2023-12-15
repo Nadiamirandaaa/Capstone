@@ -106,6 +106,7 @@ function daftar(){
     let mcu = $('#inputMCU').val();
     let nama = $('#inputNama').val();
 
+    
     $.ajax({
         url: '/pendaftaranonline',
         method: 'POST',
@@ -119,9 +120,11 @@ function daftar(){
         success: function(response) {
             if (response["result"] === 'success') {
                 $('#nomorAntrian').text(response.nomor_antrian);
-                $('#tanggalAntrian').text(response.tanggal);
-                $('#sesiAntrian').text(response.sesi);
-                $('#modalNomorAntrian').modal('show');
+                $('#tanggal').text(response.tanggal);
+                $('#hari').text(response.hari);
+                $('#sesi').text(response.sesi);
+                $('#jam').text(response.jam);
+                $('#resultModal').modal('show');
             } else {
                 Swal.fire({
                     title: "Gagal melakukan pendaftaran!",
@@ -185,3 +188,4 @@ $(document).ready(function(){
 function refreshPage() {
     location.reload();
 }
+

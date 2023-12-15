@@ -9,41 +9,42 @@
             <div class="card">
                 <div class="card-body p-xl-5">
                     <h2 class="card-title text-center mb-5">HealtyMe - Pendaftaran Online</h2>
-						<div class="input-group mb-4">
-							<span class="input-group-text w-25" id="basic-addon1">Nama</span>
-							<input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" id="inputNama" name="nama" value="{{ nama }}" readonly>
-						</div>
-                        <!-- <div class="mb-3">
+                    <div class="input-group mb-4">
+                        <span class="input-group-text w-25" id="basic-addon1">Nama</span>
+                        <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                            id="inputNama" name="nama" value="{{ nama }}" readonly>
+                    </div>
+                    <!-- <div class="mb-3">
                             <label for="inputNIK" class="form-label">Nomor NIK</label>
                             <input type="text" class="form-control" id="inputNIK" placeholder="Masukkan nomor NIK Anda">
                         </div> -->
-                        <div class="input-group mb-4">
-                            <span for="inputDate" class=" input-group-text w-25">Pilih Tanggal</span>
-							<input type="date" class="form-control" id="inputDate"/>
-                            <!-- <input type="date" class="form-control" id="inputDate" name="tanggal"> -->
-                        </div>
-                        <div class="input-group mb-4">
-                            <label for="inputSession" class="input-group-text w-25">Pilih Sesi</label>
-                            <select class="form-select" id="inputSession" name="sesi">
-								<option disabled selected hidden>Choose...</option>
-                                <option value="pagi">Pagi</option>
-                                <option value="siang">Siang</option>
-                                <option value="sore">Sore</option>
-                            </select>
-                        </div>
-                        <div class="mb-4 input-group">
-                            <label for="inputMCU" class="input-group-text w-25">Pilihan MCU</label>
-                            <select class="form-select" id="inputMCU" name="mcu">
-								<option selected>Choose...</option>
-                                <option value="general">General Check-Up</option>
-                                <option value="dental">Dental Check-Up</option>
-                                <option value="eye">Eye Check-Up</option>
-                                <!--Tambahkan opsi lainnya sesuai kebutuhan-->
-                            </select>
-                        </div>
-                        <div class="text-center mt-4">
-                            <button type="submit" class="btn btn-secondary btn-lg" onclick="daftar()">Daftar</button>
-                        </div>
+                    <div class="input-group mb-4">
+                        <span for="inputDate" class=" input-group-text w-25">Pilih Tanggal</span>
+                        <input type="date" class="form-control" id="inputDate" />
+                        <!-- <input type="date" class="form-control" id="inputDate" name="tanggal"> -->
+                    </div>
+                    <div class="input-group mb-4">
+                        <label for="inputSession" class="input-group-text w-25">Pilih Sesi</label>
+                        <select class="form-select" id="inputSession" name="sesi">
+                            <option disabled selected hidden>Choose...</option>
+                            <option value="pagi">Pagi</option>
+                            <option value="siang">Siang</option>
+                            <option value="sore">Sore</option>
+                        </select>
+                    </div>
+                    <div class="mb-4 input-group">
+                        <label for="inputMCU" class="input-group-text w-25">Pilihan MCU</label>
+                        <select class="form-select" id="inputMCU" name="mcu">
+                            <option disabled selected hidden>Choose...</option>
+                            <option value="general">General Check-Up</option>
+                            <option value="dental">Dental Check-Up</option>
+                            <option value="eye">Eye Check-Up</option>
+                            <!--Tambahkan opsi lainnya sesuai kebutuhan-->
+                        </select>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-secondary btn-lg" onclick="daftar()">Daftar</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -51,8 +52,9 @@
 </div>
 
 <!-- Modal untuk menampilkan nomor antrian -->
-<div class="modal fade" id="modalNomorAntrian" tabindex="-1" role="dialog" aria-labelledby="modalNomorAntrianLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="modalNomorAntrianLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalNomorAntrianLabel">Nomor Antrian Anda</h5>
@@ -60,13 +62,14 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
+            <div style="padding: 8px;">
                 <p>Nomor Antrian Anda: <span id="nomorAntrian"></span></p>
-                <p>Tanggal : <span id="tanggalAntrian"></span></p>
-                <p>sesi : <span id="sesiAntrian"></span></p>
+                <p>Hari <span id="hari"></span>, <span id="tanggal"></span></p>
+                <p>Sesi <span id="sesi"></span> Jam <span id="jam"> WIB</span></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="refreshPage()">Tutup</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                    onclick="refreshPage()">Tutup</button>
             </div>
         </div>
     </div>

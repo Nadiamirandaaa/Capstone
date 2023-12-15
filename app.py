@@ -5,7 +5,6 @@ import hashlib
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 import locale
 
-
 import os
 from os.path import join, dirname
 from dotenv import load_dotenv
@@ -24,6 +23,7 @@ locale.setlocale(locale.LC_TIME, 'id_ID')
 
 app = Flask(__name__)
 SECRET_KEY = os.environ.get("SECRET_KEY")
+
 
 # _________________ Token User ________________________________________________
 def get_user_info():
@@ -126,44 +126,88 @@ def pendaftaranonline():
 
         user_info = get_user_info()  if get_user_info() else {'_id': None}
 
-        
         if not (tanggal and sesi and mcu and nama):
             return jsonify({'result': 'error', 'message': 'Data tidak lengkap'})
+        
+        tanggal_obj = datetime.strptime(tanggal, '%Y-%m-%d')
+        tanggal_formatted = tanggal_obj.strftime('%d %b %Y')
+        hari = tanggal_obj.strftime("%A")
 
-        if db.antrian.find_one({"user_id": user_info["_id"], "tanggal": tanggal,"nama": nama}):
-            tanggal_obj = datetime.strptime(tanggal, '%Y-%m-%d')
-            tanggal_formatted = tanggal_obj.strftime('%d %b %Y')
-            return jsonify({'result': 'error', 'message': f'Anda sudah mendaftar pada tanggal {tanggal_formatted} ({tanggal_obj.strftime("%A")})'})
+        tanggal_sekarang = datetime.now()
+
+        if tanggal_obj < tanggal_sekarang:
+            return jsonify({'result': 'error', 'message': 'Pendaftaran tidak bisa dilakukan untuk tanggal yang sudah lewat'})
+
+
+        if hari == "Sabtu" or hari == "Minggu":
+            return jsonify({'result': 'error', 'message': 'Pelayanan Tidak Tersedia Pada Akhir Pekan (Sabtu atau Minggu)'})
+        
+        if sesi == "pagi":
+            jam_awal = datetime.strptime('08:00', '%H:%M')
+            jam_akhir = datetime.strptime('12:00', '%H:%M')
+            durasi_per_antrian = timedelta(minutes=15)
+        elif sesi == "siang":
+            jam_awal = datetime.strptime('12:30', '%H:%M')
+            jam_akhir = datetime.strptime('14:30', '%H:%M')
+            durasi_per_antrian = timedelta(minutes=15)
+        elif sesi == "sore":
+            jam_awal = datetime.strptime('15:00', '%H:%M')
+            jam_akhir = datetime.strptime('18:00', '%H:%M')
+            durasi_per_antrian = timedelta(minutes=20)
+        else:
+            return jsonify({'result': 'error', 'message': 'Sesi tidak valid'})
+        
+        # waktu_sekarang = datetime.now().time()
+        # if waktu_sekarang > jam_akhir.time():
+        #     return jsonify({'result': 'error', 'message': 'Kuota pendaftaran untuk sesi ini telah habis'})
+
+        
+        # jam_akhir_hari = datetime.strptime('18:00', '%H:%M').time()
+        # if waktu_sekarang > jam_akhir_hari:
+        #     return jsonify({'result': 'error', 'message': 'Kuota pendaftaran untuk hari ini telah habis'})
+
+        if db.antrian.find_one({"user_id": user_info["_id"], "tanggal": tanggal_formatted}):
+            return jsonify({'result': 'error', 'message': f'Anda sudah mendaftar pada Hari {hari}, {tanggal_formatted} '})
+        
 
         # _________________ Antrian _________________________
-        if db.antrian.count_documents({"tanggal": tanggal,
+        if db.antrian.count_documents({"tanggal": tanggal_formatted,
         "sesi": sesi,
         "mcu": mcu}) == 0:
             nomor_antrian_baru = 1
+            jam = jam_awal
         else:
             last_item = db.antrian.find_one(sort=[('_id', -1)])
             
-            if (last_item['tanggal'] != tanggal and
+            if (last_item['tanggal'] != tanggal_formatted and
                          last_item['sesi'] != sesi and
                          last_item['mcu'] != mcu):
                 
                 nomor_antrian_baru = 1
+                jam = jam_awal
             else:
                 nomor_antrian_baru = last_item['nomor_antrian'] + 1
+                jam = last_item['jam'] + durasi_per_antrian 
 
         data_pendaftaran = {
             'user_id': user_info["_id"],
             'nama': nama,
             'nomor_antrian': nomor_antrian_baru,
-            'tanggal': tanggal,
+            'hari': hari,
+            'jam' : jam.strftime('%H:%M'),
+            'tanggal': tanggal_formatted,
             'sesi': sesi,
             'mcu': mcu,
             'nomor_antrian': nomor_antrian_baru
         }
         db.antrian.insert_one(data_pendaftaran)
 
-        return jsonify({'result': 'success','tanggal': tanggal,
+        return jsonify({'result': 'success','nama': nama,
+            'nomor_antrian': nomor_antrian_baru,
+            'hari': hari,
+            'tanggal': tanggal_formatted,
             'sesi': sesi,
+            'jam': jam.strftime('%H:%M'),
             'mcu': mcu,
             'nomor_antrian': nomor_antrian_baru})
 
@@ -181,6 +225,9 @@ def register():
         jenis_kelamin = request.form['gender']
         alamat = request.form['alamat']
 
+        if not nik or len(nik) != 16:
+            return jsonify({'result': 'error', 'message': 'NIK harus terdiri dari 16 karakter!'})
+    
         if not (nama and nik and jenis_kelamin and alamat):
             return jsonify({'result': 'error', 'message': 'Harap Isi Semua Data'})
         
