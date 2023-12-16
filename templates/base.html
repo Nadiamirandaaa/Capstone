@@ -88,10 +88,10 @@
                         <a href="{{ url_for('homeAdmin') }}" class="nav-link {% if active_page == 'homeAdmin' %}active{% endif %}" aria-current="page">Dashboard</a>
                     </li>
                     <li>
-                        <a href="{{ url_for('users') }}" class="nav-link {% if active_page == 'users' %}active{% endif %}">Users</a>
+                        <a href="{{ url_for('detail_users') }}" class="nav-link {% if active_page == 'detail_users' %}active{% endif %}">Users</a>
                     </li>
                     <li>
-                        <a href="#" class="nav-link {% if active_page == 'antrian' %}active{% endif %}">Antrian</a>
+                        <a href="{{ url_for('detail_users') }}" class="nav-link {% if active_page == 'antrian' %}active{% endif %}">Antrian</a>
                     </li>
                     <li>
                         <a href="#" class="nav-link {% if active_page == 'produk' %}active{% endif %}">Produk</a>
