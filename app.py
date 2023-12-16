@@ -409,30 +409,25 @@ def save_data():
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
 
         nama_mcu = request.form['nama_mcu']
+        gambar_mcu = request.files.get('gambar_mcu') 
         detailrs_mcu = request.form['detailrs_mcu']
-
-        doc = {"nama_mcu": nama_mcu, "detailrs_mcu": detailrs_mcu, "user_id": payload["id"]}
-        db.medical_checkup.insert_one(doc)
-
-        return jsonify({'message': 'Data Berhasil Disimpan!', 'success': True})
-    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
-        return jsonify({'message': 'Token tidak valid!'})
-
-@app.route('/delete_data', methods=['POST'])
-def delete_data():
-    try:
-        token_receive = request.cookies.get("mytoken")
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
-
-        nama_mcu = request.form['nama_mcu']
-        detailrs_mcu = request.form['detailrs_mcu']
-
-        db.medical_checkup.delete_one({"nama_mcu": nama_mcu, "detailrs_mcu": detailrs_mcu, "user_id": payload["id"]})
         
-        return jsonify({'message': 'Data Dihapus!', 'success': True})
+        if gambar_mcu:
+            doc = {
+                "nama_mcu": nama_mcu,
+                "gambar_mcu": gambar_mcu.filename,
+                "detailrs_mcu": detailrs_mcu,
+                "user_id": payload["id"]
+            }
+            db.medical_checkup.insert_one(doc)
+            return jsonify({'message': 'Data Berhasil Disimpan!', 'success': True})
+        else:
+            return jsonify({'message': 'Gambar MCU is required.', 'success': False})
+
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return jsonify({'message': 'Token tidak valid!'})
 
+   
 @app.route('/admin/detailrs/<nama_mcu>', methods=['GET'])
 def detailrs(nama_mcu):
     try:
@@ -440,6 +435,7 @@ def detailrs(nama_mcu):
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
 
         mcu_data = db.medical_checkup.find_one({"nama_mcu": nama_mcu, "user_id": payload["id"]})
+
         return render_template('admin/detailrs.html', mcu_data=mcu_data)
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return jsonify({'message': 'Token tidak valid!'})
@@ -456,16 +452,5 @@ def get_all_data():
         return jsonify({'message': 'Token tidak valid!'})
    
 
-@app.route('/admin/users', methods=['GET'])
-def users():
-    informasi = get_user_data()
-    return render_template('admin/user.html',active_page='users',informasi=informasi)
-
-@app.route('/delete_user/<id>', methods=['POST'])
-def delete_user(userId):
-    if request.method == 'POST':
-        db.users.delete_one({'_id': ObjectId(userId)})
-        return jsonify({'result': 'success'})
-    
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5000, debug=True)
