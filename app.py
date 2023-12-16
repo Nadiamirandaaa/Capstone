@@ -311,29 +311,30 @@ def akun():
 # _________________ Admin Pages Encrypted ________________________________________________
 @app.route('/admin',methods=['GET'])
 def homeAdmin():
-    admininfo = get_admin_info()
-    jumlah_user = db.users.count_documents({})
-    jumlah_antri = db.antrian.count_documents({})
-    jumlah_mcu = db.medical_checkup.count_documents({})
-    users = db.users.find({})
-    antrian = db.antrian.find({})
-    informasi_dashboard = {
-        'jumlah_user': jumlah_user,
-        'jumlah_antrian': jumlah_antri,
-        'user': users,
-        'antrian':antrian,
-        'mcu':jumlah_mcu}
     
+    admininfo = get_admin_info()
     if not admininfo:
         return redirect(url_for("show_loginAdmin"))
 
     admin_data = db.admin.find_one({'admin': admininfo['admin']})  
 
     if admin_data:
-        admin = admin_data.get('admin')
-        password= admin_data.get('password')
+        admin_log = admin_data.get('admin')
+        password_log= admin_data.get('password')
 
-        return render_template('admin/dashboard.html', admin=admin, password=password, admininfo=admininfo, informasi_dashboard=informasi_dashboard)
+        jumlah_user = db.users.count_documents({})
+        jumlah_antri = db.antrian.count_documents({})
+        jumlah_mcu = db.medical_checkup.count_documents({})
+        users = db.users.find({})
+        antrian = db.antrian.find({})
+        informasi_dashboard = {
+            'jumlah_user': jumlah_user,
+            'jumlah_antrian': jumlah_antri,
+            'user': users,
+            'antrian':antrian,
+            'mcu':jumlah_mcu}
+
+        return render_template('admin/dashboard.html', admin=admin_log, password=password_log, admininfo=admininfo,informasi_dashboard=informasi_dashboard)
     else:
         return jsonify({'error': 'Data pengguna tidak ditemukan'})
     
@@ -346,9 +347,9 @@ def loginAdmin():
         pass_received = request.form["pass"]
 
 
-        user = db.admin.find_one({'admin': nama_received, 'password': pass_received})
+        admin = db.admin.find_one({'admin': nama_received, 'password': pass_received})
 
-        if user:
+        if admin:
             token = jwt.encode({'id': nama_received, "exp": datetime.utcnow() + timedelta(seconds=60 * 60 * 24)}, SECRET_KEY, algorithm='HS256')
             response = jsonify({
                 "result": "success",
@@ -367,7 +368,17 @@ def show_loginAdmin():
 # _________________ Edit Detail Rumah Sakit ________________________________________________         
 @app.route('/admin/editrs')
 def editrs():
-   return render_template('admin/editrs.html')
+   admininfo = get_admin_info()
+   if not admininfo:
+        return redirect(url_for("show_loginAdmin"))
+   admin_data = db.admin.find_one({'admin': admininfo['admin']})  
+   if admin_data:
+        admin = admin_data.get('admin')
+        password= admin_data.get('password')
+
+        return render_template('admin/editrs.html', admin=admin, password=password, admininfo=admininfo)
+   else:
+        return jsonify({'error': 'Data pengguna tidak ditemukan'})
 
 @app.route('/save_data', methods=['POST'])
 def save_data():

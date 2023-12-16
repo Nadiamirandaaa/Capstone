@@ -194,3 +194,9 @@ function sign_out() {
     alert("Signed out!");
     window.location.href = "/login";
   }
+
+function signout() {
+    $.removeCookie("mytoken", { path: "/" });
+    alert("Signed out!");
+    window.location.href = "/admin/login";
+  }
