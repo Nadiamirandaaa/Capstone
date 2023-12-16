@@ -192,11 +192,45 @@ function refreshPage() {
 function sign_out() {
     $.removeCookie("mytoken", { path: "/" });
     alert("Signed out!");
-    window.location.href = "/login";
+    window.location.href = "/";
   }
 
 function signout() {
     $.removeCookie("mytoken", { path: "/" });
     alert("Signed out!");
-    window.location.href = "/admin/login";
+    window.location.href = "/admin";
   }
+
+
+function deleteuser() {
+    
+
+    $.ajax({
+        url: '/delete_user/' + id,
+        method: 'POST',
+        success: function(response) {
+            if (response.result === "success") {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      Swal.fire({
+                        title: "Deleted!",
+                        text: "Your file has been deleted.",
+                        icon: "success"
+                      });
+                    }
+                  });
+            } else {
+                alert(response.message);
+            }
+        }
+        
+    });
+}

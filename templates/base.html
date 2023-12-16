@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -29,7 +30,7 @@
 
 <body>
     {% if navbar %}
-    <nav class="custom-navbar navbar navbar-expand-md sticky-top"
+    <nav class="custom-navbar navbar navbar-expand-md fixed-top shadow p-3 rounded"
         arial-label="Furni navigation bar">
 
         <div class="container">
@@ -65,6 +66,46 @@
         </div>
 
     </nav>
+    {% endif %}
+
+    {% if sidebar %}
+    <div class="col-2">
+        <div>
+            <h5 class="fixed-top shadow p-3 mb-5 bg-body-tertiary rounded" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button"
+            aria-controls="offcanvasExample"><span class="fs-1 fw-bold" style="color: #65B741;">HealtyMe.</span></h5>
+        </div>
+        <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasExample"
+            aria-labelledby="offcanvasLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasLabel"> <span class="fs-1 fw-bold"
+                        style="color: #65B741;">HealtyMe.</span></h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                        <a href="{{ url_for('homeAdmin') }}" class="nav-link {% if active_page == 'homeAdmin' %}active{% endif %}" aria-current="page">Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('users') }}" class="nav-link {% if active_page == 'users' %}active{% endif %}">Users</a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link {% if active_page == 'antrian' %}active{% endif %}">Antrian</a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link {% if active_page == 'produk' %}active{% endif %}">Produk</a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link {% if active_page == 'laporan' %}active{% endif %}">Laporan</a>
+                    </li>
+                    <li>
+                        <div class="btn btn-secondary mt-3" onclick="signout()">Log Out</div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
     {% endif %}
 
 

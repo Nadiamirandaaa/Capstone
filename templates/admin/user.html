@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}HealtyMe - Admin{% endblock %}
+{% set sidebar = True %}
+{% block content %}
+        <main class="container my-5">
+            <div class="petunjuk-section container-fluid">
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2>Total Users: {{ informasi.jumlah_user }}</h2>
+                    <a href="#" class="btn btn-primary btn-sm view-all-button">View All</a>
+                </div>
+    
+                <div class="table-responsive mb-3">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nama</th>
+                                <th>Jenis Kelamin</th>
+                                <th>Alamat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in informasi.user %}
+                            <tr>
+                                <td>{{ user._id }}</td>
+                                <td>{{ user.nama }}</td>
+                                <td>{{ user.jenis_kelamin }}</td>
+                                <td>{{ user.alamat }}</td>
+                                <td>
+                                    <a class="btn btn-sm btn-danger" onclick="deleteuser('{{ user._id }}')">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

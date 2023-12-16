@@ -25,20 +25,20 @@ a {
     font-weight: 600; }
 
 .custom-navbar {
-  background: #3b5d50 !important;
+  background: #396756 !important;
   padding-top: 20px;
   padding-bottom: 20px; 
 }
 
 .custom-navbar .navbar-brand {
   font-size: 32px;
-  font-weight: 600; 
+  font-weight: 700; 
+  color: #fff;
 }
 
 .custom-navbar .navbar-brand > span {
-  opacity: .4; 
+  color: #65B741; 
 }
-
 .custom-navbar .navbar-toggler {
   border-color: transparent; 
 }
@@ -97,13 +97,15 @@ a {
 }
 
 .hero {
-  background: #3b5d50;
-  padding: calc(4rem - 30px) 0 0rem 0; 
-}
+  background-color: #3b5d50;
+  /* margin-top: 120px; */
+  max-height: 340px;
+  padding: 140px;  
+ }
 
 .hero .intro-excerpt {
   position: relative;
-  z-index: 4; 
+  /* z-index: 4;  */
 }
 
 .hero h3 {
@@ -189,9 +191,9 @@ a {
   padding: 5rem 0 6rem 0; 
 }
 
-.petunjuk-section .post-entry a {
+/* .petunjuk-section .post-entry a {
   text-decoration: none; 
-}
+} */
 
 .petunjuk-section .post-entry .post-thumbnail {
   display: block;
@@ -244,3 +246,42 @@ a {
   padding: 20px;
 }
 
+
+/* Gaya dasar */
+.hero {
+  background-color: #3b5d50;
+  max-height: 340px;
+  padding: 140px;
+}
+
+.hero .intro-excerpt {
+  position: relative;
+}
+
+.hero h3 {
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 30px;
+}
+
+.hero p {
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 30px;
+}
+
+/* Media query untuk tampilan yang lebih responsif */
+@media screen and (max-width: 768px) {
+  .hero {
+    padding: 90px;
+  }
+
+  .hero h3 {
+    font-size: 22px;
+    margin-bottom: 18px;
+  }
+
+  .hero p {
+    font-size: 12px;
+    margin-bottom: 20px;
+  }
+}

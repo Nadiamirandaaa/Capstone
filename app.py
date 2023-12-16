@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 import hashlib
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 import locale
+from bson import ObjectId
 
 import os
 from os.path import join, dirname
@@ -69,6 +70,28 @@ def inject_admin_info():
 
 # _________________ End Token Admin ________________________________________________
 
+def get_user_data():
+    users_info = get_user_info()
+    jumlah_user = db.users.count_documents({})
+    jumlah_antri = db.antrian.count_documents({})
+    jumlah_mcu = db.medical_checkup.count_documents({})
+    users = db.users.find({})
+    antrian = db.antrian.find({})
+    data_user = db.users.find_one({'nama':users_info})
+    informasi = {
+        'jumlah_user': jumlah_user,
+        'jumlah_antrian': jumlah_antri,
+        'user': users,
+        'antrian':antrian,
+        'mcu':jumlah_mcu,
+        'data_user':data_user}
+    return informasi
+
+@app.context_processor
+def inject_user_info():
+    informasi = get_user_data()
+    return dict(informasi=informasi)
+
 
 # _________________ Login Page Display ________________________________________________
 @app.route('/login', methods=['GET'])
@@ -105,7 +128,7 @@ def show_pendaftaranonline():
     if not user_info:
         return redirect(url_for("login"))
 
-    user_data = db.users.find_one({'nama': user_info['nama']})  
+    user_data = db.users.find_one({'_id': user_info['_id']})  
 
     if user_data:
         nama_pengguna = user_data.get('nama')
@@ -221,6 +244,11 @@ def register():
         jenis_kelamin = request.form['gender']
         alamat = request.form['alamat']
 
+        if jenis_kelamin == '1':
+            jenis_kelamin = 'LAKI-LAKI'
+        elif jenis_kelamin == '2':
+            jenis_kelamin = 'PEREMPUAN'
+
         if not nik or len(nik) != 16:
             return jsonify({'result': 'error', 'message': 'NIK harus terdiri dari 16 karakter!'})
     
@@ -293,26 +321,32 @@ def artikelurine():
 # _________________ Account Pages Display ________________________________________________
 @app.route('/akun')
 def akun():
+    informasi = get_user_data()
     user_info = get_user_info()
     if not user_info:
         return redirect(url_for("login"))
 
-    user_data = db.users.find_one({'nama': user_info['nama']})  
+    user_data = db.users.find_one({'_id': user_info[str('_id')]})  
 
     if user_data:
         nama_pengguna = user_data.get('nama')
         nik_pengguna = user_data.get('nik')
+        informasi = {
+            'nama':user_info.get('nama'),
+            'jenis_kelamin':user_info.get('jenis_kelamin'),
+            'alamat':user_info.get('alamat'),
+        }
 
-        return render_template('user/akun.html', nama=nama_pengguna, nik=nik_pengguna, user_info=user_info)
+
+        return render_template('user/akun.html', nama=nama_pengguna, nik=nik_pengguna, user_info=user_info, informasi=informasi)
     else:
         return jsonify({'error': 'Data pengguna tidak ditemukan'})
-
 
 # _________________ Admin Pages Encrypted ________________________________________________
 @app.route('/admin',methods=['GET'])
 def homeAdmin():
-    
     admininfo = get_admin_info()
+    informasi = get_user_data()
     if not admininfo:
         return redirect(url_for("show_loginAdmin"))
 
@@ -322,19 +356,7 @@ def homeAdmin():
         admin_log = admin_data.get('admin')
         password_log= admin_data.get('password')
 
-        jumlah_user = db.users.count_documents({})
-        jumlah_antri = db.antrian.count_documents({})
-        jumlah_mcu = db.medical_checkup.count_documents({})
-        users = db.users.find({})
-        antrian = db.antrian.find({})
-        informasi_dashboard = {
-            'jumlah_user': jumlah_user,
-            'jumlah_antrian': jumlah_antri,
-            'user': users,
-            'antrian':antrian,
-            'mcu':jumlah_mcu}
-
-        return render_template('admin/dashboard.html', admin=admin_log, password=password_log, admininfo=admininfo,informasi_dashboard=informasi_dashboard)
+        return render_template('admin/dashboard.html', admin=admin_log, password=password_log, active_page='homeAdmin',informasi=informasi)
     else:
         return jsonify({'error': 'Data pengguna tidak ditemukan'})
     
@@ -434,5 +456,16 @@ def get_all_data():
         return jsonify({'message': 'Token tidak valid!'})
    
 
+@app.route('/admin/users', methods=['GET'])
+def users():
+    informasi = get_user_data()
+    return render_template('admin/user.html',active_page='users',informasi=informasi)
+
+@app.route('/delete_user/<id>', methods=['POST'])
+def delete_user(userId):
+    if request.method == 'POST':
+        db.users.delete_one({'_id': ObjectId(userId)})
+        return jsonify({'result': 'success'})
+    
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5000, debug=True)

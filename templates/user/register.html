@@ -18,15 +18,15 @@
                             <label for="floatingInput" >NIK</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <select class="form-control" id="inputGender" name="jenis_kelamin" oninput="this.value = this.value.toUpperCase()">
+                            <select class="form-select" id="inputGender" name="jenis_kelamin" oninput="this.value = this.value.toUpperCase()">
                                 <option disabled selected hidden>Choose...</option>
-                                <option value="laki-laki">Laki-laki</option>
-                                <option value="perempuan">Perempuan</option>
+                                <option value="1">Laki-laki</option>
+                                <option value="2">Perempuan</option>
                             </select>
                             <label for="floatingInput" >Jenis Kelamin</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <textarea class="form-control" id="inputAddress" rows="3" placeholder="Masukkan alamat Anda" name="alamat" oninput="this.value = this.value.toUpperCase()"></textarea>
+                            <textarea style="height: 100px" class="form-control" id="inputAddress" rows="3" placeholder="Masukkan alamat Anda" name="alamat" oninput="this.value = this.value.toUpperCase()"></textarea>
                             <label for="floatingInput" >Alamat</label>
                         </div>
                         <button type="submit" class="btn btn-secondary mt-4 login-btn d-block mx-auto" onclick="register()">Registrasi</button>
