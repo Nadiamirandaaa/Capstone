@@ -6,31 +6,33 @@
     <!-- Registration Form -->
     <div class="container">
         <div class="row justify-content-center align-items-center" style="height: 100vh;">
-            <div class="login-form">
-                <h2 class="logo-text">HealtyMe - Registrasi</h2>
-                    <div class="mb-3 input-group">
-                        <span for="inputName" class="input-group-text w-25">Nama</span>
-                        <input type="text" class="form-control" id="inputName" placeholder="Masukkan nama Anda" oninput="this.value = this.value.toUpperCase()" name="nama">
-                    </div>
-                    <div class="mb-3 input-group">
-                        <span for="inputNIK" class="input-group-text w-25">NIK</span>
-                        <input type="number" class="form-control" id="inputNIK" placeholder="Masukkan NIK Anda" name="nik">
-                    </div>
-                    <div class="mb-3 input-group">
-                        <span for="inputGender" class="input-group-text w-25">Jenis Kelamin</span>
-                        <select class="form-control" id="inputGender" name="jenis_kelamin">
-                            <option disabled selected hidden>Choose...</option>
-                            <option value="laki-laki">Laki-laki</option>
-                            <option value="perempuan">Perempuan</option>
-                        </select>
-                    </div>
-                    <div class="mb-3 input-group">
-                        <span for="inputAddress" class="input-group-text w-25">Alamat</span>
-                        <textarea class="form-control" id="inputAddress" rows="3" placeholder="Masukkan alamat Anda" name="alamat" oninput="this.value = this.value.toUpperCase()"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-secondary mt-4 login-btn d-block mx-auto" onclick="register()">Registrasi</button>
-                    <p class="text-center mt-3">Sudah Punya Akun? <a href="/login" class="register-link">Login</a></p>
-            </div></div>
+            <div class="col-md-4">
+                <div class="login-form">
+                    <h2 class="logo-text">HealtyMe - Registrasi</h2>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="inputName" placeholder="Masukkan nama Anda" oninput="this.value = this.value.toUpperCase()" name="nama">
+                            <label for="floatingInput" >Nama</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="number" class="form-control" id="inputNIK" placeholder="Masukkan NIK Anda" name="nik">
+                            <label for="floatingInput" >NIK</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <select class="form-control" id="inputGender" name="jenis_kelamin" oninput="this.value = this.value.toUpperCase()">
+                                <option disabled selected hidden>Choose...</option>
+                                <option value="laki-laki">Laki-laki</option>
+                                <option value="perempuan">Perempuan</option>
+                            </select>
+                            <label for="floatingInput" >Jenis Kelamin</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control" id="inputAddress" rows="3" placeholder="Masukkan alamat Anda" name="alamat" oninput="this.value = this.value.toUpperCase()"></textarea>
+                            <label for="floatingInput" >Alamat</label>
+                        </div>
+                        <button type="submit" class="btn btn-secondary mt-4 login-btn d-block mx-auto" onclick="register()">Registrasi</button>
+                        <p class="text-center mt-3">Sudah Punya Akun? <a href="/login" class="register-link">Login</a></p>
+                </div></div>
+            </div>
     </div>
     <!-- End Registration Form -->
 {% endblock %}

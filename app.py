@@ -16,13 +16,13 @@ load_dotenv(dotenv_path)
 MONGODB_URI = os.environ.get("MONGODB_URI")
 DB_NAME =  os.environ.get("DB_NAME")
 
-client = MongoClient("mongodb+srv://capgemini:capstone@cluster0.il5vinp.mongodb.net/?retryWrites=true&w=majority")
-db = client.capstone
+client = MongoClient(MONGODB_URI)
+db = client[DB_NAME]
 
 locale.setlocale(locale.LC_TIME, 'id_ID')
 
 app = Flask(__name__)
-SECRET_KEY = "34567898ygjh4wcxb323g767gfsg755gje2gbkl"
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 
 
@@ -293,13 +293,37 @@ def artikelurine():
 # _________________ Account Pages Display ________________________________________________
 @app.route('/akun')
 def akun():
-   return render_template('user/akun.html')
+    user_info = get_user_info()
+    if not user_info:
+        return redirect(url_for("login"))
+
+    user_data = db.users.find_one({'nama': user_info['nama']})  
+
+    if user_data:
+        nama_pengguna = user_data.get('nama')
+        nik_pengguna = user_data.get('nik')
+
+        return render_template('user/akun.html', nama=nama_pengguna, nik=nik_pengguna, user_info=user_info)
+    else:
+        return jsonify({'error': 'Data pengguna tidak ditemukan'})
 
 
 # _________________ Admin Pages Encrypted ________________________________________________
 @app.route('/admin',methods=['GET'])
 def homeAdmin():
     admininfo = get_admin_info()
+    jumlah_user = db.users.count_documents({})
+    jumlah_antri = db.antrian.count_documents({})
+    jumlah_mcu = db.medical_checkup.count_documents({})
+    users = db.users.find({})
+    antrian = db.antrian.find({})
+    informasi_dashboard = {
+        'jumlah_user': jumlah_user,
+        'jumlah_antrian': jumlah_antri,
+        'user': users,
+        'antrian':antrian,
+        'mcu':jumlah_mcu}
+    
     if not admininfo:
         return redirect(url_for("show_loginAdmin"))
 
@@ -309,9 +333,10 @@ def homeAdmin():
         admin = admin_data.get('admin')
         password= admin_data.get('password')
 
-        return render_template('admin/dashboard.html', admin=admin, password=password, admininfo=admininfo)
+        return render_template('admin/dashboard.html', admin=admin, password=password, admininfo=admininfo, informasi_dashboard=informasi_dashboard)
     else:
         return jsonify({'error': 'Data pengguna tidak ditemukan'})
+    
 
 # _________________ Admin Login Process ________________________________________________
 @app.route('/admin/login', methods=['POST'])
@@ -396,6 +421,7 @@ def get_all_data():
         return jsonify({'all_data': all_data})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return jsonify({'message': 'Token tidak valid!'})
+   
 
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5000, debug=True)
