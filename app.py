@@ -85,6 +85,22 @@ def get_user_data():
         'data_user':data_user}
     return informasi
 
+def get_updated_user_data():
+    users_info = get_user_info()
+    jumlah_user = db.users.count_documents({})
+    jumlah_antri = db.antrian.count_documents({})
+    jumlah_mcu = db.medical_checkup.count_documents({})
+    users = db.users.find({})
+    antrian = db.antrian.find({})
+    informasi = {
+        'jumlah_user': jumlah_user,
+        'jumlah_antrian': jumlah_antri,
+        'user': users,
+        'antrian': antrian,
+        'mcu': jumlah_mcu,
+    }
+    return informasi
+
 @app.context_processor
 def inject_user_info():
     informasi = get_user_data()
@@ -329,14 +345,14 @@ def akun():
     if user_data:
         nama_pengguna = user_data.get('nama')
         nik_pengguna = user_data.get('nik')
-        informasi = {
+        informasi_user = {
             'nama':user_info.get('nama'),
             'jenis_kelamin':user_info.get('jenis_kelamin'),
             'alamat':user_info.get('alamat'),
         }
 
 
-        return render_template('user/akun.html', nama=nama_pengguna, nik=nik_pengguna, user_info=user_info, informasi=informasi)
+        return render_template('user/akun.html', nama=nama_pengguna, nik=nik_pengguna, user_info=user_info, informasi_user=informasi_user, informasi=informasi)
     else:
         return jsonify({'error': 'Data pengguna tidak ditemukan'})
 
@@ -471,23 +487,21 @@ def detail_users():
     informasi = get_user_data()
     return render_template('admin/user.html',informasi=informasi, active_page="detail_users")
 
-@app.route('/delete_user', methods=['POST'])
-def delete_user():
+@app.route('/delete_user/<user_id>', methods=['POST'])
+def delete_user(user_id):
     try:
         token_receive = request.cookies.get("mytoken")
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
 
-        user_id = request.form.get('user_id')
-        if not user_id:
-            return jsonify({'message': 'User Id diperlukan', 'success': False})
+        user_id = ObjectId(request.form.get('user_id'))
         
-        deleted_user = db.users.find_one_and_delete({'_id': ObjectId(user_id), 'nama': payload['id']})
+        result = db.users.delete_one({'_id': user_id})
 
-        if deleted_user:
-            return jsonify({'message': 'User Berhasil Dihapus!', 'success': True})
+        if result.deleted_count == 1:
+            return jsonify({'success': True, 'message': 'User Berhasil Dihapus'})
         else:
-            return jsonify({'message': 'Tidak Dapat Menghapus User', 'success': False})
-        
+            return jsonify({'success': False, 'message': 'User Gagal Dihapus'})
+   
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return jsonify({'message': 'Token Tidak Valid', 'success': False})
 
