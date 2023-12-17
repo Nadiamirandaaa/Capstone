@@ -5,22 +5,24 @@
 {% block content %}
 <div class="container-fluid petunjuk-section">
 	<div class="container petunjuk-section">
-		<table class="table table-borderless">
-			<thead>
-				<tr>
-					<th scope="col">Medical Cek Up (MCU)</th>
-					<th scope="col">Total Antrian</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for item in data_antrian %}
-				<tr>
-					<td>MCU {{ item._id }}</td>
-					<td>{{ item.totalPendaftar }}</td>
-				</tr>
-				{% endfor %}
-			</tbody>
-		</table>
+		<div class="card shadow p-3">
+			<table class="table table-borderless">
+				<thead>
+					<tr>
+						<th scope="col">Medical Cek Up (MCU)</th>
+						<th scope="col">Total Antrian</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for item in data_antrian %}
+					<tr>
+						<td>MCU {{ item._id }}</td>
+						<td>{{ item.totalPendaftar }}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>
 {% endblock %}

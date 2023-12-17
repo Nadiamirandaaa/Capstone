@@ -17,13 +17,13 @@ load_dotenv(dotenv_path)
 MONGODB_URI = os.environ.get("MONGODB_URI")
 DB_NAME =  os.environ.get("DB_NAME")
 
-client = MongoClient("mongodb+srv://capgemini:capstone@cluster0.il5vinp.mongodb.net/?retryWrites=true&w=majority")
-db = client.capstone
-
 locale.setlocale(locale.LC_TIME, 'id_ID')
 
+client = MongoClient(MONGODB_URI)
+db = client[DB_NAME]
+
 app = Flask(__name__)
-SECRET_KEY = "34567898ygjh4wcxb323g767gfsg755gje2gbkl"
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # _________________ Token User ________________________________________________
 def get_user_info():
@@ -75,13 +75,15 @@ def get_user_data():
     jumlah_mcu = db.medical_checkup.count_documents({})
     users = db.users.find({})
     antrian = db.antrian.find({})
-    data_user = db.users.find_one({'nama':users_info})
+    mcu = db.medical_checkup.find({})
+    data_user = db.users.find_one({'_id':users_info})
     informasi = {
         'jumlah_user': jumlah_user,
         'jumlah_antrian': jumlah_antri,
         'user': users,
+        'mcu': mcu,
         'antrian':antrian,
-        'mcu':jumlah_mcu,
+        'mcu_jumlah':jumlah_mcu,
         'data_user':data_user}
     return informasi
 
@@ -295,14 +297,6 @@ def petunjuk():
    user_info = get_user_info()
    return render_template('user/petunjuk.html',user_info=user_info)
 
-@app.route('/petunjukpendaftaran')
-def petunjukpendaftaran():
-   return render_template('user/petunjukpendaftaran.html')
-
-@app.route('/petunjukhasilpemeriksaan')
-def petunjukhasilpemeriksaan():
-   return render_template('user/petunjukhasilpemeriksaan.html')
-
 # _________________ Article Pages Display ________________________________________________
 @app.route('/artikelkolesterol')
 def artikelkolesterol():
@@ -319,23 +313,16 @@ def artikelurine():
 # _________________ Account Pages Display ________________________________________________
 @app.route('/akun')
 def akun():
-    informasi = get_user_data()
+    
     user_info = get_user_info()
     if not user_info:
         return redirect(url_for("login"))
 
     user_data = db.users.find_one({'_id': user_info[str('_id')]})  
-
+    data_user = db.users.find_one({'nik':use})
     if user_data:
         nama_pengguna = user_data.get('nama')
-        nik_pengguna = user_data.get('nik')
-        informasi = {
-            'nama':user_info.get('nama'),
-            'jenis_kelamin':user_info.get('jenis_kelamin'),
-            'alamat':user_info.get('alamat'),
-        }
-
-
+        nik_pengguna = data_user.get('nik')
         return render_template('user/akun.html', nama=nama_pengguna, nik=nik_pengguna, user_info=user_info, informasi=informasi)
     else:
         return jsonify({'error': 'Data pengguna tidak ditemukan'})
@@ -344,7 +331,7 @@ def akun():
 @app.route('/admin',methods=['GET'])
 def homeAdmin():
     admininfo = get_admin_info()
-    informasi = get_user_data()
+    
     if not admininfo:
         return redirect(url_for("show_loginAdmin"))
 
@@ -353,6 +340,7 @@ def homeAdmin():
     if admin_data:
         admin_log = admin_data.get('admin')
         password_log= admin_data.get('password')
+        informasi = get_user_data()
 
         return render_template('admin/dashboard.html', admin=admin_log, password=password_log, active_page='homeAdmin',informasi=informasi)
     else:
@@ -465,7 +453,6 @@ def get_all_data():
 
 
 
-
 @app.route('/admin/detail/users')
 def detail_users():
     informasi = get_user_data()
@@ -486,6 +473,12 @@ def detail_antrian():
         doc['tanggal'] = datetime.strptime(doc['tanggal'], '%d %b %Y')
     sorted_data = sorted(data_from_db, key=lambda x: x['tanggal'])
     return render_template('admin/antrian.html',informasi=informasi, sorted_data=sorted_data,active_page="detail_antrian")
+
+@app.route('/admin/detail/mcu')
+def detail_mcu():
+    informasi = get_user_data()
+    return render_template('admin/mcu.html',informasi=informasi, active_page="detail_mcu")
+
 
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5000, debug=True)

@@ -20,6 +20,7 @@
                                 <th>Hari / Tanggal</th>
                                 <th>Sesi</th>
                                 <th>Waktu</th>
+                                <th>Medical Cek Up (MCU)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -31,6 +32,7 @@
                                     <td>{{ user.hari }}, {{ user.tanggal.strftime('%d %b %Y') }}</td>
                                     <td>{{ user.sesi }}</td>
                                     <td>{{ user.jam }}</td>
+                                    <td>{{ user.mcu }}</td>
                                     <td>
                                         <a class="btn btn-sm btn-primary" onclick="">
                                             <i class="fas fa-edit"></i>
