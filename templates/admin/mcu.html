@@ -14,10 +14,183 @@
 	<link href="/static/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 	<link href="/static/css/style.css" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 	<title> Medical Check Up | HealtyMe </title>
 
 </head>
 <script>
+	function showMCUKolesterol() {
+		$("#form_mcu_kolesterol").show();
+	}
+			function submitMCUKolesterol() {
+				var nama = $("#nama_mcu_kolesterol").val();
+				var tanggal_lahir = $("#tanggal_lahir_mcu_kolesterol").val();
+				var umur = $("#umur_mcu_kolesterol").val();
+				var jenis_kelamin = $("#jenis_kelamin_mcu_kolesterol").val();
+				var alamat = $("#alamat_mcu_kolesterol").val();
+				var tanggal_pemeriksaan = $("#tanggal_pemeriksaan_mcu_kolesterol").val();
+				var berat_badan = $("#berat_badan_mcu_kolesterol").val();
+				var tinggi_badan = $("#tinggi_badan_mcu_kolesterol").val();
+				var tekanan_darah = $("#tekanan_darah_mcu_kolesterol").val();
+				var kolesterol_total = $("#kolesterol_total").val();
+				var kolesterol_hdl = $("#kolesterol_hdl").val();
+				var kolesterol_ldl = $("#kolesterol_ldl").val();
+
+				if (!nama || !tanggal_lahir || !umur || !jenis_kelamin || !alamat || !tanggal_pemeriksaan || !berat_badan || !tinggi_badan || !tekanan_darah || !kolesterol_total || !kolesterol_hdl || !kolesterol_ldl) {
+					alert('Data harus diisi');
+					return;
+				}
+
+				var payload = {
+					nama : nama,
+					tanggal_lahir : tanggal_lahir,
+					umur : umur,
+					jenis_kelamin : jenis_kelamin,
+					alamat : alamat,
+					tanggal_pemeriksaan : tanggal_pemeriksaan,
+					berat_badan : berat_badan,
+					tinggi_badan : tinggi_badan,
+					tekanan_darah : tekanan_darah,
+					kolesterol_total: kolesterol_total,
+					kolesterol_hdl: kolesterol_hdl,
+					kolesterol_ldl: kolesterol_ldl
+				};
+
+				$.ajax({
+					type: "POST",
+					url: "/save_mcu_kolesterol",
+					data: payload,
+					success: function (response) {
+						if (response.success) {
+							alert(response.message);
+							$("#form_mcu_kolesterol").hide();
+						} else {
+							alert(response.message);
+						}
+					},
+					error: function (error) {
+						console.error("Error:", error);
+						alert("Terjadi kesalahan saat mengirim data MCU kolesterol.");
+					}
+				});
+			}
+
+
+	function showMCUGulaDarahForm() {
+		$("#form_mcu_gula_darah").show();
+	}
+			function submitMCUGulaDarah() {
+				var nama = $("#nama_mcu_gula_darah").val();
+				var tanggal_lahir = $("#tanggal_lahir_mcu_gula_darah").val();
+				var umur = $("#umur_mcu_gula_darah").val();
+				var jenis_kelamin = $("#jenis_kelamin_mcu_gula_darah").val();
+				var alamat = $("#alamat_mcu_gula_darah").val();
+				var tanggal_pemeriksaan = $("#tanggal_pemeriksaan_mcu_gula_darah").val();
+				var berat_badan = $("#berat_badan_mcu_gula_darah").val();
+				var tinggi_badan = $("#tinggi_badan_mcu_gula_darah").val();
+				var tekanan_darah = $("#tekanan_darah_mcu_gula_darah").val();
+				var gula_darah_puasa = $("#gula_darah_puasa").val();
+				var gula_darah_sewaktu = $("#gula_darah_sewaktu").val();
+				var gula_darah_sesudah_makan = $("#gula_darah_sesudah_makan").val();
+
+				if (!nama || !tanggal_lahir || !umur || !jenis_kelamin || !alamat || !tanggal_pemeriksaan || !berat_badan || !tinggi_badan || !tekanan_darah || !gula_darah_puasa || !gula_darah_sewaktu || !gula_darah_sesudah_makan) {
+					alert('Data Pasien harus diisi');
+					return;
+				}
+
+				var payload = {
+					nama : nama,
+					tanggal_lahir : tanggal_lahir,
+					umur : umur,
+					jenis_kelamin : jenis_kelamin,
+					alamat : alamat,
+					tanggal_pemeriksaan : tanggal_pemeriksaan,
+					berat_badan : berat_badan,
+					tinggi_badan : tinggi_badan,
+					tekanan_darah : tekanan_darah,
+					gula_darah_puasa: gula_darah_puasa,
+					gula_darah_sewaktu: gula_darah_sewaktu,
+					gula_darah_sesudah_makan: gula_darah_sesudah_makan
+				};
+
+				$.ajax({
+					type: "POST",
+					url: "/save_mcu_gula_darah",
+					data: payload,
+					success: function (response) {
+						if (response.success) {
+							alert(response.message);
+							$("#form_mcu_gula_darah").hide();
+						} else {
+							alert(response.message);
+						}
+					},
+					error: function (error) {
+						console.error("Error:", error);
+						alert("Terjadi kesalahan saat mengirim data MCU gula darah.");
+					}
+				});
+			}
+
+	function showMCUUrineForm() {
+		$("#form_mcu_urine").show();
+	}
+			function submitMCUUrine() {
+				var nama = $("#nama_mcu_urine").val();
+				var tanggal_lahir = $("#tanggal_lahir_mcu_urine").val();
+				var umur = $("#umur_mcu_urine").val();
+				var jenis_kelamin = $("#jenis_kelamin_mcu_urine").val();
+				var alamat = $("#alamat_mcu_urine").val();
+				var tanggal_pemeriksaan = $("#tanggal_pemeriksaan_mcu_urine").val();
+				var berat_badan = $("#berat_badan_mcu_urine").val();
+				var tinggi_badan = $("#tinggi_badan_mcu_urine").val();
+				var tekanan_darah = $("#tekanan_darah_mcu_urine").val();
+				var warna = $("#warna").val();
+				var kejernihan = $("#kejernihan").val();
+				var nitrit = $("#nitrit").val();
+				var protein = $("#protein").val();
+				var glukosa = $("#glukosa").val();
+
+				if (!nama || !tanggal_lahir || !umur || !jenis_kelamin || !alamat || !tanggal_pemeriksaan || !berat_badan || !tinggi_badan || !tekanan_darah || !warna || !kejernihan || !nitrit || !protein || !glukosa) {
+					alert('Semua field harus diisi');
+					return;
+				}
+
+				var payload = {
+					nama : nama,
+					tanggal_lahir : tanggal_lahir,
+					umur : umur,
+					jenis_kelamin : jenis_kelamin,
+					alamat : alamat,
+					tanggal_pemeriksaan : tanggal_pemeriksaan,
+					berat_badan : berat_badan,
+					tinggi_badan : tinggi_badan,
+					tekanan_darah : tekanan_darah,
+					warna: warna,
+					kejernihan: kejernihan,
+					nitrit: nitrit,
+					protein: protein,
+					glukosa: glukosa
+				};
+
+				$.ajax({
+					type: "POST",
+					url: "/save_mcu_urine",
+					data: payload,
+					success: function (response) {
+						if (response.success) {
+							alert(response.message);
+							$("#form_mcu_urine").hide();
+						} else {
+							alert(response.message);
+						}
+					},
+					error: function (error) {
+						console.error("Error:", error);
+						alert("Terjadi kesalahan saat mengirim data MCU urine.");
+					}
+				});
+			}
 
 </script>
 
@@ -36,24 +209,249 @@
 		</div>
 		<!-- End Hero -->
 
-        <div class="mcuform">
-            <form id="mcuForm">
-                <div class="mb-3 mx-5">
-                    <label for="nama_mcu" class="form-label">Nama Pasien</label>
-                    <input type="text" class="form-control" id="nama_mcu" name="nama_mcu">
-                </div>
-                <div class="mb-3 mx-5">
-                    <label for="detail_mcu" class="form-label">Pilihan Medical Check Up (MCU)</label>
-                    <input type="text" class="form-control" id="nama_mcu" name="nama_mcu">
-                </div>
-                <div class="mb-3 mx-5">
-                    <label for="detail_mcu" class="form-label">Keluhan Pasien</label>
-                    <textarea class="form-control" id="detailrs_mcu" name="detailrs_mcu" rows="5"></textarea>
-                </div>
-                <div class="button-group mx-5">
-                    <button type="button" class="btn btn-secondary me-2 ms-auto" onclick="saveData()">Input Hasil MCU</button>
-                </div>
-            </form>
-        </div>
+		<div class="card mx-5">
+			<div class="card-body d-flex justify-content-between align-items-center">
+			  <h5 class="card-text"> Medical Check Up (MCU) Kolesterol </h5>
+			  <button type="button" class="btn btn-secondary me-2 ms-auto" onclick="showMCUKolesterol()">Input Data MCU</button>
+			</div>
+			<form id="form_mcu_kolesterol" style="display: none;" class="mx-auto w-75">
+				<div class="mb-3">
+					<label for="nama_mcu_kolesterol">Nama</label>
+					<input type="text" id="nama_mcu_kolesterol" name="nama" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="tanggal_lahir_mcu_kolesterol">Tanggal Lahir</label>
+					<input type="text" id="tanggal_lahir_mcu_kolesterol" name="tanggal_lahir" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="umur_mcu_kolesterol">Umur</label>
+					<input type="number" id="umur_mcu_kolesterol" name="umur" required>
+				</div>
+				
+				<div class="mb-3">
+					<label for="jenis_kelamin_mcu_kolesterol">Jenis Kelamin</label>
+					<select id="jenis_kelamin_mcu_kolesterol" name="jenis_kelamin" class="form-select" required>
+						<option value="pilih">Pilih</option>
+						<option value="laki-laki">Laki-Laki</option>
+						<option value="perempuan">Perempuan</option>
+					</select>
+				</div>
+
+				<div class="mb-3">
+					<label for="alamat_mcu_kolesterol">Alamat</label>
+					<input type="text" id="alamat_mcu_kolesterol" name="alamat" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="tanggal_pemeriksaan_mcu_kolesterol">Tanggal Pemeriksaan</label>
+					<input type="text" id="tanggal_pemeriksaan_mcu_kolesterol" name="tanggal_pemeriksaan" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="berat_badan_mcu_kolesterol">Berat Badan (BB)</label>
+					<input type="number" id="berat_badan_mcu_kolesterol" name="berat_badan" required>	
+				</div>
+
+				<div class="mb-3">
+					<label for="tinggi_badan_mcu_kolesterol">Tinggi Badan (TB)</label>
+					<input type="number" id="tinggi_badan_mcu_kolesterol" name="tinggi_badan" required>	
+				</div>
+
+				<div class="mb-3">
+					<label for="tekanan_darah_mcu_kolesterol">Tekanan Darah</label>
+					<input type="text" id="tekanan_darah_mcu_kolesterol" name="tekanan_darah" required>	
+				</div>
+
+				<div class="mb-3">
+					<label for="kolesterol_total">Kolesterol Total (mg/dL):</label>
+					<input type="text" id="kolesterol_total" name="kolesterol_total" required>	
+				</div>
+
+				<div class="mb-3">
+					<label for="kolesterol_hdl">Kolesterol HDL (mg/dL):</label>
+					<input type="text" id="kolesterol_hdl" name="kolesterol_hdl" required>	
+				</div>
+
+				<div class="mb-3">
+					<label for="kolesterol_ldl">Kolesterol LDL (mg/dL):</label>
+					<input type="text" id="kolesterol_ldl" name="kolesterol_ldl" required>	
+				</div>
+
+				<button type="button" class="btn btn-secondary me-2 ms-auto" onclick="submitMCUKolesterol()">Submit MCU Kolesterol</button>
+			</form>
+		</div>
+	
+		<div class="card mx-5">
+			<div class="card-body d-flex justify-content-between align-items-center">
+			  <h5 class="card-text"> Medical Check Up (MCU) Gula Darah </h5>
+			  <button type="button" class="btn btn-secondary me-2 ms-auto" onclick="showMCUGulaDarahForm()">Input Data MCU</button>
+			</div>
+			<form id="form_mcu_gula_darah" style="display: none;" class="mx-auto w-75">
+				<div class="mb-3">
+					<label for="nama_mcu_gula_darah">Nama</label>
+					<input type="text" id="nama_mcu_gula_darah" name="namah" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="tanggal_lahir_mcu_gula_darah">Tanggal Lahir</label>
+					<input type="text" id="tanggal_lahir_mcu_gula_darah" name="tanggal_lahir" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="umur_mcu_gula_darah">Umur</label>
+					<input type="number" id="umur_mcu_gula_darah" name="umur" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="jenis_kelamin_mcu_gula_darah">Jenis Kelamin</label>
+					<select id="jenis_kelamin_mcu_gula_darah" name="jenis_kelamin" class="form-select" required>
+						<option value="pilih">Pilih</option>
+						<option value="laki-laki">Laki-Laki</option>
+						<option value="perempuan">Perempuan</option>
+					</select>
+				</div>
+
+				<div class="mb-3">
+					<label for="alamat_mcu_gula_darah">Alamat</label>
+					<input type="text" id="alamat_mcu_gula_darah" name="alamat" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="tanggal_pemeriksaan_mcu_gula_darah">Tanggal Pemeriksaan</label>
+					<input type="text" id="tanggal_pemeriksaan_mcu_gula_darah" name="tanggal_pemeriksaan" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="berat_badan_mcu_gula_darah">Berat Badan (BB)</label>
+					<input type="number" id="berat_badan_mcu_gula_darah" name="berat_badan" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="tinggi_badan_mcu_gula_darah">Tinggi Badan (TB)</label>
+					<input type="number" id="tinggi_badan_mcu_gula_darah" name="tinggi_badan" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="tekanan_darah_mcu_gula_darah">Tekanan Darah</label>
+					<input type="text" id="tekanan_darah_mcu_gula_darah" name="tekanan_darah" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="gula_darah_puasa">Gula Darah Puasa (mg/dL):</label>
+					<input type="text" id="gula_darah_puasa" name="gula_darah_puasa" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="gula_darah_sewaktu">Gula Darah Sewaktu (mg/dL):</label>
+					<input type="text" id="gula_darah_sewaktu" name="gula_darah_sewaktu" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="gula_darah_sesudah_makan">Gula Darah Sesudah Makan (mg/dL):</label>
+					<input type="text" id="gula_darah_sesudah_makan" name="gula_darah_sesudah_makan" required>
+				</div>
+
+				<button type="button" class="btn btn-secondary me-2 ms-auto" onclick="submitMCUGulaDarah()">Submit MCU Gula Darah</button>
+			</form>
+		</div>
+		  
+		<div class="card mx-5">
+			<div class="card-body d-flex justify-content-between align-items-center">
+			  <h5 class="card-text"> Medical Check Up (MCU) Urine </h5>
+			  <button type="button" class="btn btn-secondary me-2 ms-auto" onclick="showMCUUrineForm()">Input Data MCU</button>
+			</div>
+			<form id="form_mcu_urine" style="display: none;" class="mx-auto w-75">
+				<div class="mb-3">
+					<label for="nama_mcu_urine">Nama</label>
+					<input type="text" id="nama_mcu_urine" name="nama" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="tanggal_lahir_mcu_urine">Tanggal Lahir</label>
+					<input type="text" id="tanggal_lahir_mcu_urine" name="tanggal_lahir" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="umur_mcu_urine">Umur</label>
+					<input type="number" id="umur_mcu_urine" name="umur" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="jenis_kelamin_mcu_urine">Jenis Kelamin</label>
+					<select id="jenis_kelamin_mcu_urine" name="jenis_kelamin" class="form-select" required>
+						<option value="pilih">Pilih</option>
+						<option value="laki-laki">Laki-Laki</option>
+						<option value="perempuan">Perempuan</option>
+					</select>
+				</div>
+
+				<div class="mb-3">
+					<label for="alamat_mcu_urine">Alamat</label>
+					<input type="text" id="alamat_mcu_urine" name="alamat" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="tanggal_pemeriksaan_mcu_urine">Tanggal Pemeriksaan</label>
+					<input type="text" id="tanggal_pemeriksaan_mcu_urine" name="tanggal_pemeriksaan" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="berat_badan_mcu_urine">Berat Badan (BB)</label>
+					<input type="number" id="berat_badan_mcu_urine" name="berat_badan" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="tinggi_badan_mcu_urine">Tinggi Badan (TB)</label>
+					<input type="number" id="tinggi_badan_mcu_urine" name="tinggi_badan" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="tekanan_darah_mcu_urine">Tekanan Darah</label>
+					<input type="text" id="tekanan_darah_mcu_urine" name="tekanan_darah" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="warna">Warna</label>
+					<input type="text" id="warna" name="warna" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="kejernihan">Kejernihan</label>
+					<input type="text" id="kejernihan" name="kejernihan" required>
+				</div>
+
+				<div class="mb-3">
+					<label for="nitrit">Nitrit</label>
+					<select id="nitrit" name="nitrit" class="form-select" required>
+						<option value="pilih">Pilih</option>
+						<option value="negatif">Negatif</option>
+						<option value="positif">Positif</option>
+					</select>
+				</div>
+
+				<div class="mb-3">
+					<label for="protein">Protein</label>
+					<select id="protein" name="protein" class="form-select" required>
+						<option value="pilih">Pilih</option>
+						<option value="negatif">Negatif</option>
+						<option value="positif">Positif</option>
+					</select>
+				</div>
+
+				<div class="mb-3">
+					<label for="glukosa">Glukosa</label>
+					<select id="glukosa" name="urine_glukosa" class="form-select" required>
+						<option value="pilih">Pilih</option>
+						<option value="negatif">Negatif</option>
+						<option value="positif">Positif</option>
+					</select>
+				</div>
+
+				<button type="button" class="btn btn-secondary me-2 ms-auto" onclick="submitMCUUrine()">Submit MCU Urine</button>
+			</form>
+		</div>
+	</div>
         
 </body>

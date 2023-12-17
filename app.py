@@ -500,5 +500,147 @@ def detail_antrian():
     sorted_data = sorted(data_from_db, key=lambda x: x['tanggal'])
     return render_template('admin/antrian.html',informasi=informasi, sorted_data=sorted_data,active_page="detail_antrian")
 
+
+
+
+
+@app.route('/admin/mcu')
+def mcu():
+   return render_template('admin/mcu.html')
+
+@app.route('/save_mcu_kolesterol', methods=['POST'])
+def save_mcu_kolesterol():
+    try:
+        token_receive = request.cookies.get("mytoken")
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+
+        nama = request.form.get('nama')
+        tanggal_lahir = request.form.get('tanggal_lahir')
+        umur = request.form.get('umur')
+        jenis_kelamin = request.form.get('jenis_kelamin')
+        alamat = request.form.get('alamat')
+        tanggal_pemeriksaan = request.form.get('tanggal_pemeriksaan')
+        berat_badan = request.form.get('berat_badan')
+        tinggi_badan = request.form.get('tinggi_badan')
+        tekanan_darah = request.form.get('tekanan_darah')
+        kolesterol_total = request.form.get('kolesterol_total')
+        kolesterol_hdl = request.form.get('kolesterol_hdl')
+        kolesterol_ldl = request.form.get('kolesterol_ldl')
+
+        if not (nama and tanggal_lahir and umur and jenis_kelamin and alamat and tanggal_pemeriksaan and berat_badan and tinggi_badan and tekanan_darah and kolesterol_total and kolesterol_hdl and kolesterol_ldl):
+            return jsonify({'message': 'Data MCU Kolesterol tidak lengkap', 'success': False})
+
+        mcu_data = {
+            "user_id": payload["id"],
+            "nama" : nama,
+            "tanggal_lahir" : tanggal_lahir,
+            "umur" : umur,
+            "jenis_kelamin" : jenis_kelamin,
+            "alamat" : alamat,
+            "tanggal_pemeriksaan" : tanggal_pemeriksaan,
+            "berat_badan" : berat_badan,
+            "tinggi_badan" : tinggi_badan,
+            "tekanan_darah" : tekanan_darah,
+            "kolesterol_total": kolesterol_total,
+            "kolesterol_hdl": kolesterol_hdl,
+            "kolesterol_ldl": kolesterol_ldl
+        }
+        db.mcu_kolesterol.insert_one(mcu_data)
+
+        return jsonify({'message': 'Data MCU Kolesterol berhasil disimpan!', 'success': True})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return jsonify({'message': 'Token tidak valid!', 'success': False})
+
+@app.route('/save_mcu_gula_darah', methods=['POST'])
+def save_mcu_gula_darah():
+    try:
+        token_receive = request.cookies.get("mytoken")
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+
+        nama = request.form.get('nama')
+        tanggal_lahir = request.form.get('tanggal_lahir')
+        umur = request.form.get('umur')
+        jenis_kelamin = request.form.get('jenis_kelamin')
+        alamat = request.form.get('alamat')
+        tanggal_pemeriksaan = request.form.get('tanggal_pemeriksaan')
+        berat_badan = request.form.get('berat_badan')
+        tinggi_badan = request.form.get('tinggi_badan')
+        tekanan_darah = request.form.get('tekanan_darah')
+        gula_darah_puasa = request.form.get('gula_darah_puasa')
+        gula_darah_sewaktu = request.form.get('gula_darah_sewaktu')
+        gula_darah_sesudah_makan = request.form.get('gula_darah_sesudah_makan')
+
+        if not (nama and tanggal_lahir and umur and jenis_kelamin and alamat and tanggal_pemeriksaan and berat_badan and tinggi_badan and tekanan_darah and gula_darah_puasa and gula_darah_sewaktu and gula_darah_sesudah_makan):
+            return jsonify({'message': 'Data MCU Gula Darah tidak lengkap', 'success': False})
+
+        mcu_data = {
+            "user_id": payload["id"],
+            "nama" : nama,
+            "tanggal_lahir" : tanggal_lahir,
+            "umur" : umur,
+            "jenis_kelamin" : jenis_kelamin,
+            "alamat" : alamat,
+            "tanggal_pemeriksaan" : tanggal_pemeriksaan,
+            "berat_badan" : berat_badan,
+            "tinggi_badan" : tinggi_badan,
+            "tekanan_darah" : tekanan_darah,
+            "gula_darah_puasa": gula_darah_puasa,
+            "gula_darah_sewaktu": gula_darah_sewaktu,
+            "gula_darah_sesudah_makan": gula_darah_sesudah_makan
+        }
+        db.mcu_gula_darah.insert_one(mcu_data)
+
+        return jsonify({'message': 'Data MCU Gula Darah berhasil disimpan!', 'success': True})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return jsonify({'message': 'Token tidak valid!', 'success': False})
+
+@app.route('/save_mcu_urine', methods=['POST']) 
+def save_mcu_urine():
+    try:
+        token_receive = request.cookies.get("mytoken")
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
+
+        nama = request.form.get('nama')
+        tanggal_lahir = request.form.get('tanggal_lahir')
+        umur = request.form.get('umur')
+        jenis_kelamin = request.form.get('jenis_kelamin')
+        alamat = request.form.get('alamat')
+        tanggal_pemeriksaan = request.form.get('tanggal_pemeriksaan')
+        berat_badan = request.form.get('berat_badan')
+        tinggi_badan = request.form.get('tinggi_badan')
+        tekanan_darah = request.form.get('tekanan_darah')
+        warna = request.form.get('warna')
+        kejernihan = request.form.get('kejernihan')
+        nitrit = request.form.get('nitrit')
+        protein = request.form.get('protein')
+        glukosa = request.form.get('glukosa')
+
+        if not (nama and tanggal_lahir and umur and jenis_kelamin and alamat and tanggal_pemeriksaan and berat_badan and tinggi_badan and tekanan_darah and warna and kejernihan and nitrit and protein and glukosa):
+            return jsonify({'message': 'Data MCU Urine tidak lengkap', 'success': False})
+
+        mcu_data = {
+            "user_id": payload["id"],
+            "nama" : nama,
+            "tanggal_lahir" : tanggal_lahir,
+            "umur" : umur,
+            "jenis_kelamin" : jenis_kelamin,
+            "alamat" : alamat,
+            "tanggal_pemeriksaan" : tanggal_pemeriksaan,
+            "berat_badan" : berat_badan,
+            "tinggi_badan" : tinggi_badan,
+            "tekanan_darah" : tekanan_darah,
+            "warna" : warna,
+            "kejernihan" : kejernihan,
+            "nitrit" : nitrit,
+            "protein" : protein,
+            "glukosa": glukosa
+        }
+        db.mcu_urine.insert_one(mcu_data)
+
+        return jsonify({'message': 'Data MCU Urine berhasil disimpan!', 'success': True})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return jsonify({'message': 'Token tidak valid!', 'success': False})
+
+
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5000, debug=True)
