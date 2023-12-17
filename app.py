@@ -491,5 +491,14 @@ def delete_user():
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return jsonify({'message': 'Token Tidak Valid', 'success': False})
 
+@app.route('/admin/detail/antrian')
+def detail_antrian():
+    informasi = get_user_data()
+    data_from_db = list(db.antrian.find({}))
+    for doc in data_from_db:
+        doc['tanggal'] = datetime.strptime(doc['tanggal'], '%d %b %Y')
+    sorted_data = sorted(data_from_db, key=lambda x: x['tanggal'])
+    return render_template('admin/antrian.html',informasi=informasi, sorted_data=sorted_data,active_page="detail_antrian")
+
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5000, debug=True)
