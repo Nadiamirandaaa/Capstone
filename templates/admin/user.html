@@ -46,21 +46,40 @@
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
-    function delete_user(userId) {
-        $.ajax({
-            type: 'POST',
-            url: '/delete_user',
-            data: { user_id: userId },
-            success: function (response) {
-                console.log(response.message);
-                alert(response.message);
-                location.reload();
-            },
-            error: function (error) {
-                console.error('Error saat menghapus user:', error);
-                alert('Error saat menghapus user. Coba lagi ')
-            }
-        });
+    function delete_user(user_id) {
+        var confirmation = confirm("Apakah Anda yakin ingin menghapus User?");
+        
+        if (confirmation) {
+            $.ajax({
+                type: "POST",
+                url: "/delete_user/" + user_id,
+                data: { user_id: user_id },
+                success: function(response) {
+                    console.log(response);
+                    if (response.success) {
+                        updateUserData(response.informasi);
+
+                        alert(response.message);
+
+                        location.reload();
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function(error) {
+                    console.error("Error:", error);
+                    alert("Terjadi kesalahan saat menghapus pengguna.");
+                }
+            });
+        }
+    }
+
+    function updateUserData(informasi) {
+        $('#jumlah_user').text(informasi.jumlah_user);
+
+        var deletedRow = $('[data-user-id="' + informasi.deleted_user_id + '"]');
+
+        deletedRow.remove();
     }
 </script>
 {% endblock %}
