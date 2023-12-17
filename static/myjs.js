@@ -201,36 +201,39 @@ function signout() {
     window.location.href = "/admin";
   }
 
-
-function deleteuser() {
+  function delete_user(user_id) {
+    var confirmation = confirm("Apakah Anda yakin ingin menghapus User?");
     
-
-    $.ajax({
-        url: '/delete_user/' + id,
-        method: 'POST',
-        success: function(response) {
-            if (response.result === "success") {
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "You won't be able to revert this!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes, delete it!"
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      Swal.fire({
-                        title: "Deleted!",
-                        text: "Your file has been deleted.",
-                        icon: "success"
-                      });
-                    }
-                  });
-            } else {
-                alert(response.message);
+    if (confirmation) {
+        $.ajax({
+            type: "POST",
+            url: "/delete_user/" + user_id,
+            data: { user_id: user_id },
+            success: function(response) {
+                console.log(response);
+                if (response.success) {
+                    updateUserData(response.informasi);
+                    window.location.reload();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function(error) {
+                console.error("Error:", error);
+                alert("Terjadi kesalahan saat menghapus pengguna.");
             }
-        }
-        
-    });
+        });
+    }
+}
+
+function updateUserData(informasi) {
+    if (informasi && informasi.jumlah_user) {
+        $('#jumlah_user').text(informasi.jumlah_user);
+
+        var deletedRow = $('[data-user-id="' + informasi.deleted_user_id + '"]');
+        deletedRow.remove();
+    } else {
+        console.error("Objek informasi tidak terdefinisi atau tidak memiliki properti 'jumlah_user'.", informasi);
+    }
+    
 }
