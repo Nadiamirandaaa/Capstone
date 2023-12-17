@@ -473,10 +473,23 @@ def detail_users():
 
 @app.route('/delete_user', methods=['POST'])
 def delete_user():
-    user_id = request.form.get('user_id')
+    try:
+        token_receive = request.cookies.get("mytoken")
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
 
-    response = {'status': 'success','message': 'Berhasil Hapus User!'}
-    return jsonify(response)
+        user_id = request.form.get('user_id')
+        if not user_id:
+            return jsonify({'message': 'User Id diperlukan', 'success': False})
+        
+        deleted_user = db.users.find_one_and_delete({'_id': ObjectId(user_id), 'nama': payload['id']})
+
+        if deleted_user:
+            return jsonify({'message': 'User Berhasil Dihapus!', 'success': True})
+        else:
+            return jsonify({'message': 'Tidak Dapat Menghapus User', 'success': False})
+        
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return jsonify({'message': 'Token Tidak Valid', 'success': False})
 
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5000, debug=True)
