@@ -237,3 +237,32 @@ function updateUserData(informasi) {
     }
     
 }
+
+function saveData() {
+    let formData = new FormData($('#mcuForm')[0]);
+    
+    $.ajax({
+        type: 'POST',
+        url: '/save_data',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (data) {
+            alert(data.message);
+            if (data.success) {
+                window.location.replace("/admin/detailrs/" + formData.get('nama_mcu'));
+            } else {
+                console.error('Error:', data.message);
+            }
+        },
+        error: function (error) {
+            console.error('Error:', error);
+        }
+    });
+}
+
+function tambahData() {
+    // Gantilah dengan logika untuk menambah data atau alur yang sesuai
+    // Contoh: redirect ke halaman tambah data
+    window.location.href = '/admin/detail/mcu/editrs';
+}

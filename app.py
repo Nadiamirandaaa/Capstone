@@ -335,18 +335,17 @@ def akun():
         return redirect(url_for("login"))
 
     user_data = db.users.find_one({'_id': user_info[str('_id')]})  
-    data_user = db.users.find_one({'nik':use})
+    
     if user_data:
         nama_pengguna = user_data.get('nama')
         nik_pengguna = user_data.get('nik')
         informasi_user = {
-            'nama':user_info.get('nama'),
-            'jenis_kelamin':user_info.get('jenis_kelamin'),
-            'alamat':user_info.get('alamat'),
-        }
+        'nama': user_data.get('nama'),
+        'jenis_kelamin': user_data.get('jenis_kelamin'),
+        'alamat': user_data.get('alamat')
+    }
 
-
-        return render_template('user/akun.html', nama=nama_pengguna, nik=nik_pengguna, user_info=user_info, informasi_user=informasi_user, informasi=informasi)
+        return render_template('user/akun.html', nama=nama_pengguna, nik=nik_pengguna, user_info=user_info, informasi_user=informasi_user)
     else:
         return jsonify({'error': 'Data pengguna tidak ditemukan'})
 
@@ -397,7 +396,7 @@ def show_loginAdmin():
     return render_template("admin/login-admin.html")
 
 # _________________ Edit Detail Rumah Sakit ________________________________________________         
-@app.route('/admin/editrs')
+@app.route('/admin/detail/mcu/editrs')
 def editrs():
    admininfo = get_admin_info()
    if not admininfo:
@@ -507,6 +506,11 @@ def detail_antrian():
         doc['tanggal'] = datetime.strptime(doc['tanggal'], '%d %b %Y')
     sorted_data = sorted(data_from_db, key=lambda x: x['tanggal'])
     return render_template('admin/antrian.html',informasi=informasi, sorted_data=sorted_data,active_page="detail_antrian")
+
+@app.route('/admin/detail/mcu')
+def detail_mcu():
+    informasi = get_user_data()
+    return render_template('admin/das_mcu.html',informasi=informasi,active_page="detail_antrian")
 
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5000, debug=True)
