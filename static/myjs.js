@@ -1,3 +1,4 @@
+
 function redirectToCorrectPage() {
     if (document.referrer.includes("/login")) {
         window.location.href = "/akun";
@@ -196,47 +197,64 @@ function sign_out() {
   }
 
 function signout() {
-    $.removeCookie("mytoken", { path: "/" });
+    $.removeCookie("mytoken", { path: "/admin" });
     alert("Signed out!");
-    window.location.href = "/admin";
+    window.location.href = "/admin/login";
   }
 
-  function delete_user(user_id) {
-    var confirmation = confirm("Apakah Anda yakin ingin menghapus User?");
-    
-    if (confirmation) {
-        $.ajax({
-            type: "POST",
-            url: "/delete_user/" + user_id,
-            data: { user_id: user_id },
-            success: function(response) {
-                console.log(response);
-                if (response.success) {
-                    updateUserData(response.informasi);
-                    window.location.reload();
-                } else {
-                    alert(response.message);
+
+function delete_mcu(id) {
+        $('#deleteModal').css('display', 'block');
+        $('#confirmDelete').on('click', function() {
+            $.ajax({
+                url: '/delete_mcu',
+                type: 'POST',
+                data: JSON.stringify({ _id: id }),
+                contentType: 'application/json',
+                success: function(response) {
+                    location.reload();
+                },
+                error: function(error) {
+                    console.log('Error:', error);
                 }
-            },
-            error: function(error) {
-                console.error("Error:", error);
-                alert("Terjadi kesalahan saat menghapus pengguna.");
-            }
+            });
         });
     }
-}
 
-function updateUserData(informasi) {
-    if (informasi && informasi.jumlah_user) {
-        $('#jumlah_user').text(informasi.jumlah_user);
+    $('.close').on('click', function() {
+        $('#deleteModal').css('display', 'none');
+    });
 
-        var deletedRow = $('[data-user-id="' + informasi.deleted_user_id + '"]');
-        deletedRow.remove();
-    } else {
-        console.error("Objek informasi tidak terdefinisi atau tidak memiliki properti 'jumlah_user'.", informasi);
+function delete_user(id) {
+        $('#deleteModal').css('display', 'block');
+        $('#confirmDelete').on('click', function() {
+            $.ajax({
+                url: '/delete_user',
+                type: 'POST',
+                data: JSON.stringify({ _id: id ,
+                    user_id : _id}),
+                contentType: 'application/json',
+                success: function(response) {
+                    location.reload(3800);
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "MCU deleted successfully.",
+                        icon: "success"
+                      }).then((result) => {
+                            
+                    });
+                },
+                error: function(error) {
+                    console.log('Error:', error);
+                }
+            });
+        });
     }
-    
-}
+
+    $('.close').on('click', function() {
+        $('#deleteModal').css('display', 'none');
+    });
+
 
 function saveData() {
     let formData = new FormData($('#mcuForm')[0]);
@@ -247,13 +265,13 @@ function saveData() {
         data: formData,
         contentType: false,
         processData: false,
-        success: function (data) {
-            alert(data.message);
-            if (data.success) {
-                window.location.replace("/admin/detailrs/" + formData.get('nama_mcu'));
-            } else {
-                console.error('Error:', data.message);
-            }
+        success: function (response) {
+            alert(response.message);
+
+            // Setelah alert ditampilkan, kembali ke halaman /admin/detail/mcu
+            
+            window.location.href = "/admin/detail/mcu";
+            
         },
         error: function (error) {
             console.error('Error:', error);
@@ -261,8 +279,10 @@ function saveData() {
     });
 }
 
+
 function tambahData() {
     // Gantilah dengan logika untuk menambah data atau alur yang sesuai
     // Contoh: redirect ke halaman tambah data
     window.location.href = '/admin/detail/mcu/editrs';
 }
+

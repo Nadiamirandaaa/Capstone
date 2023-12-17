@@ -458,56 +458,71 @@ def get_all_data():
         return jsonify({'all_data': all_data})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return jsonify({'message': 'Token tidak valid!'})
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 @app.route('/admin/detail/users')
 def detail_users():
+    
     informasi = get_user_data()
-    return render_template('admin/user.html',informasi=informasi, active_page="detail_users")
+    admininfo = get_admin_info()
+    if not admininfo:
+        return redirect(url_for("show_loginAdmin"))
+    admin_data = db.admin.find_one({'admin': admininfo['admin']})  
+    if admin_data:
+            admin = admin_data.get('admin')
+            password= admin_data.get('password')
 
-@app.route('/delete_user/<user_id>', methods=['POST'])
-def delete_user(user_id):
+            return render_template('admin/user.html',informasi=informasi, active_page="detail_users",admininfo=admininfo)
+    else:
+            return jsonify({'error': 'Data pengguna tidak ditemukan'})
+
+    
+@app.route('/delete_mcu', methods=['POST'])
+def delete_mcu():
+    data = request.get_json()
+    _id = data['_id']
+
     try:
-        token_receive = request.cookies.get("mytoken")
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
-
-        user_id = ObjectId(request.form.get('user_id'))
+        db.medical_checkup.delete_one({"_id": ObjectId(_id)})
+        return jsonify({"status": "success"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)})
+    
+@app.route('/delete_user', methods=['POST'])
+def delete_user():
+    data = request.get_json()
+    _id = data['_id']
+    
+    try:
+        db.users.delete_one({"_id": ObjectId(_id)})
+        db.antrian.delete_many({'user_id': id})
         
-        result = db.users.delete_one({'_id': user_id})
-
-        if result.deleted_count == 1:
-            return jsonify({'success': True, 'message': 'User Berhasil Dihapus'})
-        else:
-            return jsonify({'success': False, 'message': 'User Gagal Dihapus'})
-   
-    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
-        return jsonify({'message': 'Token Tidak Valid', 'success': False})
+        return jsonify({"status": "success"})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)})
+    
 
 @app.route('/admin/detail/antrian')
 def detail_antrian():
     informasi = get_user_data()
+    admininfo = get_admin_info()
     data_from_db = list(db.antrian.find({}))
     for doc in data_from_db:
-        doc['tanggal'] = datetime.strptime(doc['tanggal'], '%d %b %Y')
+            doc['tanggal'] = datetime.strptime(doc['tanggal'], '%d %b %Y')
     sorted_data = sorted(data_from_db, key=lambda x: x['tanggal'])
-    return render_template('admin/antrian.html',informasi=informasi, sorted_data=sorted_data,active_page="detail_antrian")
+    
+    if not admininfo:
+        return redirect(url_for("show_loginAdmin"))
+    admin_data = db.admin.find_one({'admin': admininfo['admin']})
+    if admin_data:
+        admin = admin_data.get('admin')
+        password= admin_data.get('password')
+      
+        return render_template('admin/antrian.html',informasi=informasi, sorted_data=sorted_data,active_page="detail_antrian",admininfo=admininfo)
 
-
+@app.route('/admin/detail/mcu')
+def detail_mcu():
+    informasi = get_user_data()
+    return render_template('admin/das_mcu.html',informasi=informasi,active_page="detail_antrian")
 
 
 @app.route('/admin/mcu')
@@ -648,10 +663,7 @@ def save_mcu_urine():
         return jsonify({'message': 'Token tidak valid!', 'success': False})
 
 
-@app.route('/admin/detail/mcu')
-def detail_mcu():
-    informasi = get_user_data()
-    return render_template('admin/das_mcu.html',informasi=informasi,active_page="detail_antrian")
+
 
 if __name__ == '__main__':
    app.run('0.0.0.0', port=5000, debug=True)

@@ -189,6 +189,7 @@ a {
 
 .petunjuk-section {
   padding: 5rem 0 6rem 0; 
+  margin-top: 60px;
 }
 
 /* .petunjuk-section .post-entry a {
@@ -250,8 +251,8 @@ a {
 /* Gaya dasar */
 .hero {
   background-color: #3b5d50;
-  max-height: 340px;
-  padding: 140px;
+  max-height: 400px;
+  /* padding: 140px; */
 }
 
 .hero .intro-excerpt {

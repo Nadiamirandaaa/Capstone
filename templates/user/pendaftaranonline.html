@@ -69,8 +69,10 @@
                 <p>Sesi <span id="sesi"></span> Jam <span id="jam"> WIB</span></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                    onclick="refreshPage()">Tutup</button>
+                <a href="{{ url_for('home') }}">
+
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                </a>
             </div>
         </div>
     </div>

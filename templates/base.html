@@ -55,7 +55,11 @@
                     <li class="nav-item {% if request.path == url_for('petunjuk') %}active{% endif %}">
                         <a class="nav-link" href="{{ url_for('petunjuk') }}">Petunjuk</a>
                     </li>
-                    {% if user_info %}
+                    {% if not user_info%}
+                    <li class="nav-item {% if request.path == url_for('login') %}active{% endif %}">
+                        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                    </li>
+                    {% elif user_info %}
                     <li class="nav-item {% if request.path == url_for('akun') %}active{% endif %}">
                         <a class="nav-link" href="{{ url_for('akun') }}">Akun</a>
                     </li>
