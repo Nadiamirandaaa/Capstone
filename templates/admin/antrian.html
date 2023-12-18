@@ -35,9 +35,9 @@
                                     <td>{{ user.jam }}</td>
                                     <td>{{ user.mcu }}</td>
                                     <td>
-                                        <a class="btn btn-sm btn-primary" onclick="">
+                                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                             <i class="fas fa-edit"></i>
-                                        </a>
+                                        </button>
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -49,4 +49,5 @@
         </main>
     </div>
 </div>
+
 {% endblock %}

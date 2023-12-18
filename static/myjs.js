@@ -221,18 +221,14 @@ function delete_mcu(id) {
         });
     }
 
-    $('.close').on('click', function() {
-        $('#deleteModal').css('display', 'none');
-    });
-
-function delete_user(id) {
+    function delete_user(id) {
         $('#deleteModal').css('display', 'block');
         $('#confirmDelete').on('click', function() {
             $.ajax({
                 url: '/delete_user',
                 type: 'POST',
                 data: JSON.stringify({ _id: id ,
-                    user_id : _id}),
+                    user_id : id}),
                 contentType: 'application/json',
                 success: function(response) {
                     location.reload(3800);
@@ -251,9 +247,12 @@ function delete_user(id) {
         });
     }
 
+
     $('.close').on('click', function() {
         $('#deleteModal').css('display', 'none');
     });
+
+
 
 
 function saveData() {
@@ -279,10 +278,29 @@ function saveData() {
     });
 }
 
+function saveMCU() {
+    var namaMCU = $('#nama_mcu').val(); // Mendapatkan nilai input dari form
+
+    $.ajax({
+        type: 'POST',
+        url: '/save_mcu_data', // Endpoint Flask untuk menyimpan data MCU
+        data: {
+            nama_mcu: namaMCU // Mengirim data ke server
+        },
+        success: function(response) {
+            // Penanganan jika permintaan berhasil
+            console.log(response);
+            // Tambahkan kode lain sesuai kebutuhan, misalnya notifikasi atau pengalihan halaman
+        },
+        error: function(error) {
+            // Penanganan jika terjadi kesalahan saat melakukan permintaan
+            console.error(error);
+        }
+    });
+}
 
 function tambahData() {
     // Gantilah dengan logika untuk menambah data atau alur yang sesuai
     // Contoh: redirect ke halaman tambah data
     window.location.href = '/admin/detail/mcu/editrs';
 }
-

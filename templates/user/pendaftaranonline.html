@@ -27,18 +27,18 @@
                         <label for="inputSession" class="input-group-text w-25">Pilih Sesi</label>
                         <select class="form-select" id="inputSession" name="sesi">
                             <option disabled selected hidden>Choose...</option>
-                            <option value="pagi">Pagi</option>
-                            <option value="siang">Siang</option>
-                            <option value="sore">Sore</option>
+                            <option value="Pagi">Pagi</option>
+                            <option value="Siang">Siang</option>
+                            <option value="Sore">Sore</option>
                         </select>
                     </div>
                     <div class="mb-4 input-group">
                         <label for="inputMCU" class="input-group-text w-25">Pilihan MCU</label>
                         <select class="form-select" id="inputMCU" name="mcu">
                             <option disabled selected hidden>Choose...</option>
-                            <option value="general">General Check-Up</option>
-                            <option value="dental">Dental Check-Up</option>
-                            <option value="eye">Eye Check-Up</option>
+                            {% for checkup in informasi.mcu %}
+                            <option value="{{ checkup.nama_mcu }}">{{ checkup.nama_mcu }}</option>
+                            {% endfor %}
                             <!--Tambahkan opsi lainnya sesuai kebutuhan-->
                         </select>
                     </div>

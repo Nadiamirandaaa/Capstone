@@ -5,6 +5,7 @@ import hashlib
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 import locale
 from bson import ObjectId
+import json
 
 import os
 from os.path import join, dirname
@@ -435,7 +436,8 @@ def save_data():
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return jsonify({'message': 'Token tidak valid!'})
 
-   
+
+
 @app.route('/admin/detailrs/<nama_mcu>', methods=['GET'])
 def detailrs(nama_mcu):
     try:
@@ -494,7 +496,7 @@ def delete_user():
     
     try:
         db.users.delete_one({"_id": ObjectId(_id)})
-        db.antrian.delete_many({'user_id': id})
+        # db.antrian.delete_many({'user_id': id})
         
         return jsonify({"status": "success"})
     except Exception as e:
@@ -521,13 +523,16 @@ def detail_antrian():
 
 @app.route('/admin/detail/mcu')
 def detail_mcu():
+    
     informasi = get_user_data()
-    return render_template('admin/das_mcu.html',informasi=informasi,active_page="detail_antrian")
+    return render_template('admin/das_mcu.html',informasi=informasi,active_page="detail_mcu")
 
 
 @app.route('/admin/mcu')
 def mcu():
-   return render_template('admin/mcu.html')
+   informasi = get_user_data()
+   user_info = get_user_info()
+   return render_template('admin/mcu.html',informasi=informasi)
 
 @app.route('/save_mcu_kolesterol', methods=['POST'])
 def save_mcu_kolesterol():
@@ -661,8 +666,6 @@ def save_mcu_urine():
         return jsonify({'message': 'Data MCU Urine berhasil disimpan!', 'success': True})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return jsonify({'message': 'Token tidak valid!', 'success': False})
-
-
 
 
 if __name__ == '__main__':
