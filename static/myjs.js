@@ -255,47 +255,44 @@ function delete_mcu(id) {
 
 
 
-function saveData() {
-    let formData = new FormData($('#mcuForm')[0]);
+// function saveData() {
+//     let formData = new FormData($('#mcuForm')[0]);
     
+//     $.ajax({
+//         type: 'POST',
+//         url: '/save_data',
+//         data: formData,
+//         contentType: false,
+//         processData: false,
+//         success: function (response) {
+//             alert(response.message);
+
+//             // Setelah alert ditampilkan, kembali ke halaman /admin/detail/mcu
+            
+//             window.location.href = "/admin/detail/mcu";
+            
+//         },
+//         error: function (error) {
+//             console.error('Error:', error);
+//         }
+//     });
+// }
+
+function saveData() {
+    var formData = {
+        'nama_mcu': $('#nama_mcu').val(),
+        'detailrs_mcu': $('#detailrs_mcu').val()
+    };
+
     $.ajax({
         type: 'POST',
         url: '/save_data',
         data: formData,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            alert(response.message);
-
-            // Setelah alert ditampilkan, kembali ke halaman /admin/detail/mcu
-            
-            window.location.href = "/admin/detail/mcu";
-            
-        },
-        error: function (error) {
-            console.error('Error:', error);
-        }
-    });
-}
-
-function saveMCU() {
-    var namaMCU = $('#nama_mcu').val(); // Mendapatkan nilai input dari form
-
-    $.ajax({
-        type: 'POST',
-        url: '/save_mcu_data', // Endpoint Flask untuk menyimpan data MCU
-        data: {
-            nama_mcu: namaMCU // Mengirim data ke server
-        },
-        success: function(response) {
-            // Penanganan jika permintaan berhasil
-            console.log(response);
-            // Tambahkan kode lain sesuai kebutuhan, misalnya notifikasi atau pengalihan halaman
-        },
-        error: function(error) {
-            // Penanganan jika terjadi kesalahan saat melakukan permintaan
-            console.error(error);
-        }
+        dataType: 'json',
+        // encode: true
+    }).done(function(data) {
+        alert("Data berhasil disimpan")
+        window.location.href = '/admin/detail/mcu';
     });
 }
 

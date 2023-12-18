@@ -15,8 +15,8 @@ from dotenv import load_dotenv
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
-MONGODB_URI="mongodb+srv://capgemini:capstone@cluster0.il5vinp.mongodb.net/?retryWrites=true&w=majority"
-DB_NAME="capstone"
+MONGODB_URI = os.environ.get("MONGODB_URI")
+DB_NAME =  os.environ.get("DB_NAME")
 
 locale.setlocale(locale.LC_TIME, 'id_ID')
 
@@ -24,7 +24,7 @@ client = MongoClient(MONGODB_URI)
 db = client[DB_NAME]
 
 app = Flask(__name__)
-SECRET_KEY = "34567898ygjh4wcxb323g767gfsg755gje2gbkl"
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # _________________ Token User ________________________________________________
 def get_user_info():
@@ -418,21 +418,32 @@ def save_data():
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=["HS256"])
 
         nama_mcu = request.form['nama_mcu']
-        gambar_mcu = request.files.get('gambar_mcu') 
+        # gambar_mcu = request.files.get('gambar_mcu') 
         detailrs_mcu = request.form['detailrs_mcu']
         
+       
         doc = {
             "nama_mcu": nama_mcu,
+            # "gambar_mcu": gambar_mcu.filename,
             "detailrs_mcu": detailrs_mcu,
             "user_id": payload["id"]
         }
         db.medical_checkup.insert_one(doc)
-        
         return jsonify({'message': 'Data Berhasil Disimpan!', 'success': True})
+
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return jsonify({'message': 'Token tidak valid!'})
 
+@app.route('/submit_mcu', methods=['POST'])
+def submit_mcu():
+    data = request.get_json()
+    doc = {
+            'nama_mcu': data['nama_mcu'],
+            'detailrs_mcu': data['detailrs_mcu']
+        }
+    db.medical_checkup.insert_one(doc)
 
+    return jsonify({'message': 'Data telah berhasil disimpan.'}), 200
 
 @app.route('/admin/detailrs/<nama_mcu>', methods=['GET'])
 def detailrs(nama_mcu):
@@ -528,7 +539,7 @@ def detail_mcu():
 def mcu():
    informasi = get_user_data()
    user_info = get_user_info()
-   return render_template('admin/mcu.html',informasi=informasi)
+   return render_template('admin/mcu.html',informasi=informasi,user_info=user_info)
 
 @app.route('/save_mcu_kolesterol', methods=['POST'])
 def save_mcu_kolesterol():

@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
-
 {% block title %}HealtyMe - Admin{% endblock %}
-{% set sidebar = True %}
 {% block content %}
 	
 	
@@ -25,9 +23,10 @@
 			  <h5> Medical Check Up (MCU) {% for mcu in informasi.antrian %}{{mcu.mcu}}{% endfor %} </h5>
 			</div>
 			<form id="form_mcu_kolesterol" class="mx-auto w-75">
+				
 				<div class="mb-3">
 					<label for="nama_mcu_kolesterol">Nama</label>
-					<input type="text" id="nama_mcu_kolesterol" name="nama" required>
+					<input type="text" id="nama_mcu_kolesterol" name="nama" value="">
 				</div>
 
 				<div class="mb-3">
