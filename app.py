@@ -421,18 +421,14 @@ def save_data():
         gambar_mcu = request.files.get('gambar_mcu') 
         detailrs_mcu = request.form['detailrs_mcu']
         
-        if gambar_mcu:
-            doc = {
-                "nama_mcu": nama_mcu,
-                "gambar_mcu": gambar_mcu.filename,
-                "detailrs_mcu": detailrs_mcu,
-                "user_id": payload["id"]
-            }
-            db.medical_checkup.insert_one(doc)
-            return jsonify({'message': 'Data Berhasil Disimpan!', 'success': True})
-        else:
-            return jsonify({'message': 'Gambar MCU is required.', 'success': False})
-
+        doc = {
+            "nama_mcu": nama_mcu,
+            "detailrs_mcu": detailrs_mcu,
+            "user_id": payload["id"]
+        }
+        db.medical_checkup.insert_one(doc)
+        
+        return jsonify({'message': 'Data Berhasil Disimpan!', 'success': True})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return jsonify({'message': 'Token tidak valid!'})
 
