@@ -183,15 +183,15 @@ def pendaftaranonline():
         if hari == "Sabtu" or hari == "Minggu":
             return jsonify({'result': 'error', 'message': 'Pelayanan Tidak Tersedia Pada Akhir Pekan (Sabtu atau Minggu)'})
         
-        if sesi == "pagi":
+        if sesi.lower() == "pagi":
             jam_awal = datetime.strptime('08:00', '%H:%M')
             jam_akhir = datetime.strptime('12:00', '%H:%M')
             durasi_per_antrian = timedelta(minutes=60)
-        elif sesi == "siang":
+        elif sesi.lower() == "siang":
             jam_awal = datetime.strptime('12:30', '%H:%M')
             jam_akhir = datetime.strptime('14:30', '%H:%M')
             durasi_per_antrian = timedelta(minutes=15)
-        elif sesi == "sore":
+        elif sesi.lower() == "sore":
             jam_awal = datetime.strptime('15:00', '%H:%M')
             jam_akhir = datetime.strptime('18:00', '%H:%M')
             durasi_per_antrian = timedelta(minutes=15)
